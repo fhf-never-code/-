@@ -46,7 +46,10 @@
     },
     methods: {
       /*
-      表单检验函数 在非空检测后若当前输入的用户名和密码存在于全局数据中 进入主界面*/
+      表单检验函数 
+      在非空检测后若当前输入的用户名和密码存在于全局数据中 
+      进入主界面
+      */
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {

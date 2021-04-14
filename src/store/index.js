@@ -6,7 +6,7 @@ const user = [{
   id: 1001,
   userName: 'admin',
   password: 'admin',
-  department:'',
+  department:'internal',
   identity:'manager'
 }, { 
   id: 1002,
