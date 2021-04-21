@@ -57,17 +57,13 @@
             let nowUser = this.nowUser
             for (let item in user) {
               if (user[item].userName == nowUser.userName && user[item].password == nowUser.password) {
+                var realUser = user[item]
                 this.$message({
                   message: '登陆成功',
                   type: 'success'
                 });
-                this.$router.push({
-                  name: "Main",
-                  params: {
-                    nowUser
-                  }
-                })
-                sessionStorage.setItem('user', JSON.stringify(nowUser))
+                this.$router.push("Main")
+                sessionStorage.setItem('user', JSON.stringify(realUser))
                 var success = true
                 break
               }
@@ -92,15 +88,23 @@
         this.$refs[formName].resetFields();
       }
     },
+    /*在创建之前检测是否已有缓存数据
+    */
+    beforeCreate() {
+      if (sessionStorage.getItem("user")) {
+        this.$router.push("Main")
+      }
+    },
   }
 </script>
 <style scoped>
   .container {
-    background-color: rgb(241, 240, 150);
+    /* background-color: rgb(241, 240, 150); */
     position: absolute;
     width: 100%;
     height: 100%;
-    border: 1px yellow;
+    overflow: hidden;
+    background-image:url("../public/医院图.png");
   }
 
   .form {

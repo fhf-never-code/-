@@ -13,11 +13,12 @@ const routes = [
     path: '/',
     name: 'Login',
     component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue')
-  }, {
-    path: '/menu',
-    name: 'Menu',
-    component: () => import ('../components/Menu.vue')
   },
+  {
+    path: '/notice',
+    name : 'Notice',
+    component: () => import ('../components/Notice.vue')
+  }
 ]
 const router = new VueRouter({
   mode: 'history',
