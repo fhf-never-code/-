@@ -4,18 +4,24 @@
 */
 const patient = [{
     name: '李一锋',
-    age: '',
-    targetDepartment: '',
+    IDnum: '23020619980111111X',
+    sex: 'male',
+    targetDepartment: 'internalMedicine',
+    time: '2021-4-15 19:15:16',
     status: 'unchecked'
 }, {
     name: '风红枫',
-    age: '',
-    targetDepartment: '',
+    IDnum: '23061995811784',
+    sex: 'male',
+    targetDepartment: 'emergencyWard',
+    time: '2021-4-15 20:5:16',
     status: 'checked'
 }, {
-    name: '波哥',
-    age: '',
-    targetDepartment: '',
+    name: '恶魔人',
+    IDnum: '230619985',
+    sex: 'male',
+    targetDepartment: 'surgery',
+    time: '2021-4-15 20:35:23',
     status: 'finished'
 }, ]
 export default patient

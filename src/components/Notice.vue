@@ -1,13 +1,13 @@
 <template>
     <div class='container'>
         公告栏
-        <div class="block">
+       
             <el-carousel>
                 <el-carousel-item v-for="item in imgBox" :key="item.id">
                     <img :src="item.view">
                 </el-carousel-item>
             </el-carousel>
-        </div>
+       
         <img src="../public/医院图.png" alt="">
     </div>
 </template>
