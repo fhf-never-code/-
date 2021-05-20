@@ -1,7 +1,7 @@
 <template>
     <div class='container'>
         <div class="form">
-            <el-table :data="colleague" stripe style="width: 100%">
+            <el-table  :data="colleague" stripe style="width: 100%" border  >
                 <el-table-column prop="department" label="科室" width="180" >
                 </el-table-column>
                 <el-table-column prop="name" label="姓名" width="180">
@@ -78,7 +78,6 @@
 <style scoped>
     .container {
         display: flex;
-        /* justify-content: center;
-    align-items: center; */
+    
     }
 </style>

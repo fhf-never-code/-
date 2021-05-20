@@ -5,6 +5,7 @@ comparisonTable.set('inpatientWard', '病房')
 comparisonTable.set('internalMedicine', '内科')
 comparisonTable.set('surgery', '外科')
 comparisonTable.set('emergencyWard', '急诊科')
+comparisonTable.set('financeOffice', '财务处')
 
 comparisonTable.set('doctor', '医生')
 comparisonTable.set('cashier', '收银员')

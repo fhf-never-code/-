@@ -2,10 +2,10 @@
   <div class="container ">
     <div class="notice">
       挂号处病历管理
-      <el-button type="primary" @click="dialogFormVisible = true">新建病历</el-button>
+      <el-button type="primary" size="middle"  @click="dialogFormVisible = true">新建病历</el-button>
       <el-dialog title="病历管理" :visible.sync="dialogFormVisible">
-        <el-form :model="form" class="form">
-          <el-form-item label="姓名" :label-width="formLabelWidth">
+        <el-form :model="form" ref="form" class="form" :rules="rules" >
+          <el-form-item label="患者姓名" :label-width="formLabelWidth"  prop="name">
             <el-input v-model="form.name" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="性别" :label-width="formLabelWidth">
@@ -14,7 +14,7 @@
               <el-option label="女性" value="female"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="身份证号" :label-width="formLabelWidth">
+          <el-form-item label="身份证号" :label-width="formLabelWidth"  prop="IDnum">
             <el-input v-model="form.IDnum" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="挂号科室" :label-width="formLabelWidth">
@@ -31,7 +31,7 @@
             type="primary"
             @click="
               dialogFormVisible = false;
-              savePatient();
+              submitForm('form');
             "
             >保存</el-button
           >
@@ -61,14 +61,13 @@
         <el-table-column>
           <template slot-scope="scope">
             <el-button size="mini" @click="handleEdit(scope.row)">编辑 </el-button>
-            <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
+            <el-button size="mini" type="danger"  v-if="scope.row.status == 'unchecked'" @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
   </div>
 </template>
-
 <script>
    import { UPDATEPATIENT,DELETEPATIENT } from "../store/types.js"
 export default {
@@ -89,6 +88,17 @@ export default {
         time: '',
         status:'unchecked'
       },
+      rules: {
+          name: {
+            required: true,
+            message: "姓名不能为空"
+          },
+          IDnum: {
+            required: true,
+            pattern:/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/,
+            message: "身份证号为18位且需要格式正确"
+          }
+        }
     };
   },
   //监听属性 类似于data概念
@@ -103,8 +113,6 @@ export default {
     允许在当前页面新建新的病历(即为新的病人)
      */
     getPatient() {
-    
-     
          this.tableData = this.$store.state.patient;
       
     },
@@ -150,8 +158,21 @@ export default {
           return '急诊科'
       }
     },
-    /*保存时触发刷新当前列表
+    /*点击保存按钮时触发检查输入是否符合要求
     */
+    submitForm(form) {
+        this.$refs[form].validate((valid) => {
+          if (valid) {
+            this.savePatient()
+          } else {
+            this.$message({
+              message: '患者姓名和身份证号不能为空',
+              type: 'warning'
+            });
+          }
+        });
+      },
+      //将新建的患者信息保存到挂号管理界面
     savePatient() {
       if(this.isEdit!=-1) {
         this.handleDelete(this.isEdit)
@@ -177,8 +198,12 @@ export default {
         time: '',
         status:'unchecked'
       }
+      this.$message({
+                  message: '保存成功',
+                  type: 'success'
+                });
     },
-    /*取消的时候清空表单
+    /*点击取消按钮的时候清空表单
     */
     clearForm() 
     {
@@ -196,15 +221,7 @@ export default {
   created() {
     this.getPatient();
   },
-  //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
-  beforeCreate() {}, //生命周期 - 创建之前
-  beforeMount() {}, //生命周期 - 挂载之前
-  beforeUpdate() {}, //生命周期 - 更新之前
-  updated() {}, //生命周期 - 更新之后
-  beforeDestroy() {}, //生命周期 - 销毁之前
-  destroyed() {}, //生命周期 - 销毁完成
-  activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
+  
 };
 </script>
 <style scoped>

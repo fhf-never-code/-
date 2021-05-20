@@ -1,4 +1,3 @@
-<!--  -->
 <template>
 <div class=''>
     看诊管理

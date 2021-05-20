@@ -3,26 +3,26 @@
         <div class="form">
             <el-form :model="formInline">
                 <el-form-item label="姓名">
-                    <el-input v-model="formInline.name" :disabled="isAdmin"></el-input>
+                    <el-input v-model="formInline.name" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="职责">
-                    <el-input v-model="formInline.identity" :disabled="isAdmin"></el-input>
+                    <el-input v-model="formInline.identity" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="科室">
-                    <el-input v-model="formInline.department" :disabled="isAdmin"></el-input>
+                    <el-input v-model="formInline.department" disabled></el-input>
                 </el-form-item>
             </el-form>
         </div>
         <div class="form">
             <el-form :model="formInline">
                 <el-form-item label="工龄">
-                    <el-input v-model="formInline.workYears" :disabled="isAdmin"></el-input>
+                    <el-input v-model="formInline.workYears" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="本月出勤">
-                    <el-input v-model="formInline.workload.day" :disabled="isAdmin"></el-input>
+                    <el-input v-model="formInline.workload.day" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="本月工作量">
-                    <el-input v-model="formInline.workload.num" :disabled="isAdmin"></el-input>
+                    <el-input v-model="formInline.workload.num" disabled></el-input>
                 </el-form-item>
             </el-form>
         </div>

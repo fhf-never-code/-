@@ -15,9 +15,9 @@
               <i class="el-icon-user-solid"></i>
               <span slot="title">个人信息</span>
             </template>
-            <el-menu-item index="MyInformation"> <i class="el-icon-s-check"></i> 我的信息</el-menu-item>
-            <el-menu-item index="MyDepartment"> <i class="el-icon-right"></i> 我的科室</el-menu-item>
-            <el-menu-item index="MyPerformance"> <i class="el-icon-money"></i> 我的绩效</el-menu-item>
+              <el-menu-item index="MyInformation"> <i class="el-icon-s-check"></i> 我的信息</el-menu-item>
+              <el-menu-item index="MyDepartment"> <i class="el-icon-right"></i> 我的科室</el-menu-item>
+              <el-menu-item index="MyPerformance"> <i class="el-icon-money"></i> 我的绩效</el-menu-item>
           </el-submenu>
           <el-menu-item index="2" v-if="nowUser.identity == 'admin'">
             <i class="el-icon-menu"></i>
@@ -34,6 +34,11 @@
           <el-menu-item index="InpatientWard" v-if="nowUser.department == 'inpatientWard'">
             <i class="el-icon-document"></i>
             <span slot="title">病房管理</span>
+          </el-menu-item>
+          <el-menu-item index="WorkforceManagement" v-if="nowUser.identity == 'leader'&&
+           (nowUser.department=='inpatientWard'||nowUser.department=='surgery'||nowUser.department=='internalMedicine'||nowUser.department=='emergencyWard')">
+            <i class="el-icon-document"></i>
+            <span slot="title">排班管理</span>
           </el-menu-item>
           <el-menu-item index="Notice">
             <i class="el-icon-setting"></i>
@@ -55,9 +60,10 @@
             <MyDepartment :nowUser="nowUser" v-show="nowCompoents == 'MyDepartment'"></MyDepartment>
             <MyPerformance :nowUser="nowUser" v-show="nowCompoents == 'MyPerformance'"></MyPerformance>
             <InpatientWard :nowUser="nowUser" v-show="nowCompoents == 'InpatientWard'"></InpatientWard>
+            <WorkforceManagement :nowUser="nowUser"  v-show="nowCompoents == 'WorkforceManagement'"></WorkforceManagement>
           </div>
         </el-main>
-        <el-footer>东北林业大学2017级软件工程李一锋 权利所有</el-footer>
+        <el-footer>东北林业大学2017级软件工程二班李一锋 权利所有</el-footer>
       </el-container>
     </el-container>
   </div>
@@ -70,6 +76,7 @@ import Registration from '../components/Registration.vue';
 import MyDepartment from '../components/MyDepartment.vue';
 import MyPerformance from '../components/MyPerformance.vue';
 import InpatientWard from '../components/InpatientWard.vue';
+import WorkforceManagement from '../components/WorkforceManagement.vue'
 export default {
   components: {
     Notice,
@@ -79,6 +86,7 @@ export default {
     MyDepartment,
     MyPerformance,
     InpatientWard,
+    WorkforceManagement
   },
   data() {
     return {

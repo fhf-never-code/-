@@ -1,26 +1,17 @@
 <template>
     <div class='container'>
-        公告栏
-       
-            <el-carousel>
-                <el-carousel-item v-for="item in imgBox" :key="item.id">
-                    <img :src="item.view">
-                </el-carousel-item>
-            </el-carousel>
-       
-        <img src="../public/医院图.png" alt="">
+        <el-carousel indicator-position="outside" class="img">
+            <el-carousel-item v-for="item in imgBox" :key="item.view">
+              <h3>{{item.view}}</h3>
+            </el-carousel-item>
+          </el-carousel>
     </div>
 </template>
 
 <script>
-    //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
-    //例如：import 《组件名称》 from '《组件路径》';
-
     export default {
-        //import引入的组件需要注入到对象中才能使用
         components: {},
         data() {
-            //这里存放数据
             return {
                 imgBox: [{
                     id: 1,
@@ -57,8 +48,27 @@
     }
 </script>
 <style scoped>
-    /* .block {
-        height: 400px;
-        width: 400px;
-    } */
+    .container {
+        width: 1000px;
+        display: inline-block;
+    }
+    .img {
+        width: 100%;
+        height: 100%;
+    }
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 18px;
+    opacity: 0.75;
+    line-height: 300px;
+    margin: 0;
+  }
+  
+  .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+  }
+  
+  .el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
+  }
 </style>

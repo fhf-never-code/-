@@ -4,6 +4,8 @@ import * as types from './types'
 import user from './user'
 import comparisonTable from './comparisonTable'
 import patient from './patient'
+import medicine from './medicine'
+import workforce from './workforce'
 Vue.use(Vuex)
 const myActions = {
     [types.UPDATEUSER]({
@@ -19,7 +21,8 @@ const store = new Vuex.Store({
         user, //员工列表
         patient, // 病人状态列表
         comparisonTable, // 中英文对照表
-
+        medicine, // 药品表
+        workforce // 排班表
     },
     mutations: {
         //更新员工信息
