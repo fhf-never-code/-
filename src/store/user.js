@@ -12,7 +12,7 @@
 const user = [
   {
     id: 1002,
-    name: '内科辛大夫',
+    name: '曹操',
     userName: '1001',
     password: '1001',
     department: 'internalMedicine',
@@ -25,7 +25,7 @@ const user = [
   },
   {
     id: 1003,
-    name: '急诊科童主任',
+    name: '赵云',
     userName: '1002',
     password: '1002',
     department: 'surgery',
@@ -38,7 +38,7 @@ const user = [
   },
   {
     id: 10030,
-    name: '急诊科郝医生',
+    name: '吕布',
     userName: '10020',
     password: '10020',
     department: 'surgery',
@@ -51,7 +51,7 @@ const user = [
   },
   {
     id: 10031,
-    name: '急诊科廖医生',
+    name: '黄忠',
     userName: '10021',
     password: '10021',
     department: 'surgery',
