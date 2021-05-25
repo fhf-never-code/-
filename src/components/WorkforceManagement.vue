@@ -4,21 +4,28 @@
       <el-form-item v-model="form.date" prop="date" label="值班时间">
         <el-date-picker v-model="form.date" type="date" placeholder="请选择值班日期" value-format="yyyy-MM-dd"> </el-date-picker>
       </el-form-item>
-      <el-form-item v-for="item in form.workforce" :key="item.worker" class="workforceItem" prop="item" label="值班信息">
-        <el-select v-model="item.type" clearable placeholder="请选择值班类型">
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+      <el-form-item class="workforceItem" prop="dayShift" label="白班">
+        <el-select v-model="form.dayShift" multiple placeholder="请选择员工姓名">
+          <el-option v-for="item in colleague" :key="item" :value="item"> </el-option>
         </el-select>
-        <el-select v-model="item.workerName" multiple placeholder="请选择员工姓名">
+      </el-form-item>
+      <el-form-item class="workforceItem" prop="beforeNightShift" label="前夜班">
+        <el-select v-model="form.beforeNightShift" multiple placeholder="请选择员工姓名">
+          <el-option v-for="item in colleague" :key="item" :value="item"> </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item class="workforceItem" prop="afterNightShift" label="后夜班">
+        <el-select v-model="form.afterNightShift" multiple placeholder="请选择员工姓名">
           <el-option v-for="item in colleague" :key="item" :value="item"> </el-option>
         </el-select>
       </el-form-item>
       <el-button type="primary" @click="submitForm('form')">保存</el-button>
-      <el-button @click="addWorkforce">新增值班信息</el-button>
-      <el-button @click="resetForm('form')">重置</el-button>
+      <el-button @click="resetForm">重置</el-button>
     </el-form>
   </div>
 </template>
 <script>
+ import { ADDWORKFORCE } from "../store/types.js"
 export default {
   props: ['nowUser'],
   //import引入的组件需要注入到对象中才能使用
@@ -28,47 +35,28 @@ export default {
     return {
       colleague: [],
       form: {
-        workforce: [
-          {
-            workerName: '',
-            type: '',
-          },
-        ],
+        dayShift: [],
+        beforeNightShift: [],
+        afterNightShift: [],
         date: '',
       },
-      options: [
-        {
-          value: 'dayShift',
-          label: '白班',
-        },
-        {
-          value: 'beforeNightShift',
-          label: '前夜班',
-        },
-        {
-          value: 'afterNightShift',
-          label: '后夜班',
-        },
-      ],
       rules: {
         date: {
           required: true,
           message: '值班日期不能为空',
         },
-        item: [
-          {
-            required: true,
-            validator: (rule, value, cb) => {
-              let { durationEnd } = this.form.workforce;
-              if (!value || !durationEnd) {
-                console.log(value, durationEnd);
-                return cb(new Error('固定时间段不能为空!'));
-              }
-              return cb();
-            },
-            trigger: 'blur',
-          },
-        ],
+        dayShift: {
+          required: true,
+          message: '白班值班人员不能为空',
+        },
+        beforeNightShift: {
+          required: true,
+          message: '前夜班值班人员不能为空',
+        },
+        afterNightShift: {
+          required: true,
+          message: '后夜值班人员不能为空',
+        },
       },
     };
   },
@@ -86,35 +74,47 @@ export default {
     },
     submitForm(form) {
       this.$refs[form].validate(valid => {
+        var able = true;
         if (valid) {
-          let department = this.nowUser.department;
-          let workforce = {
-            department: department,
-            form: this.form,
-          };
-          sessionStorage.setItem('workforce', JSON.stringify(workforce));
+          for (let item of this.$store.state.workforce) {
+            if (this.form.date == item.information.date && this.nowUser.department == item.information.department) {
+              able = false;
+                this.$message({
+                  message: '已有指定日期值班信息',
+                  type: 'error'
+                });
+            }
+          }
+          //在已有值班数据中检索未得到选定日期的值班数据时保存
+          if (able) {
+            let department = this.nowUser.department;
+            let workforce = {
+              department: department,
+              information: this.form,
+            };
+            this.$store.commit(ADDWORKFORCE,workforce)
+            sessionStorage.setItem('workforce',JSON.stringify(this.$store.state.workforce))
+            this.resetForm('form')
+            this.form.date = ''
+              this.$message({
+                  message: '保存值班信息成功',
+                  type: 'success'
+                });
+          }
         } else {
-          console.log('error submit!!');
+           this.$message({
+                  message: '值班信息不可为空',
+                  type: 'error'
+                });
           return false;
         }
       });
     },
-    resetForm(form) {
-      this.$refs[form].resetFields();
-    },
-    //新增表单内值班项触发事件
-    addWorkforce() {
-      if (this.form.workforce.length < 3) {
-        this.form.workforce.push({
-          workerName: '',
-          type: '',
-        });
-      } else {
-        this.$message({
-          message: '值班信息不能大于三条，请进行多选',
-          type: 'warning',
-        });
-      }
+    resetForm() {
+      this.form = { dayShift: [],
+        beforeNightShift: [],
+        afterNightShift: [],
+        date: '',}
     },
   },
   //生命周期 - 创建完成（可以访问当前this实例）

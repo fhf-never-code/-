@@ -15,15 +15,14 @@
               <i class="el-icon-user-solid"></i>
               <span slot="title">个人信息</span>
             </template>
-              <el-menu-item index="MyInformation"> <i class="el-icon-s-check"></i> 我的信息</el-menu-item>
-              <el-menu-item index="MyDepartment"> <i class="el-icon-right"></i> 我的科室</el-menu-item>
-              <el-menu-item index="MyPerformance"> <i class="el-icon-money"></i> 我的绩效</el-menu-item>
+            <el-menu-item index="MyInformation"> <i class="el-icon-s-check"></i> 我的信息</el-menu-item>
+            <el-menu-item index="MyDepartment"> <i class="el-icon-right"></i> 我的科室</el-menu-item>
+            <el-menu-item index="MyPerformance"> <i class="el-icon-money"></i> 我的绩效</el-menu-item>
           </el-submenu>
-          <el-menu-item index="2" v-if="nowUser.identity == 'admin'">
-            <i class="el-icon-menu"></i>
-            <span slot="title">员工信息管理</span>
-          </el-menu-item>
-          <el-menu-item index="Diagnose" v-if="nowUser.identity == 'doctor'">
+          <el-menu-item
+            index="Diagnose"
+            v-if="nowUser.department == 'internalMedicine' || nowUser.department == 'surgery' || nowUser.department == 'emergencyWard'"
+          >
             <i class="el-icon-document"></i>
             <span slot="title">看诊管理</span>
           </el-menu-item>
@@ -35,14 +34,22 @@
             <i class="el-icon-document"></i>
             <span slot="title">病房管理</span>
           </el-menu-item>
-          <el-menu-item index="WorkforceManagement" v-if="nowUser.identity == 'leader'&&
-           (nowUser.department=='inpatientWard'||nowUser.department=='surgery'||nowUser.department=='internalMedicine'||nowUser.department=='emergencyWard')">
+          <el-menu-item
+            index="WorkforceManagement"
+            v-if="
+              nowUser.identity == 'leader' &&
+                (nowUser.department == 'inpatientWard' ||
+                  nowUser.department == 'surgery' ||
+                  nowUser.department == 'internalMedicine' ||
+                  nowUser.department == 'emergencyWard')
+            "
+          >
             <i class="el-icon-document"></i>
             <span slot="title">排班管理</span>
           </el-menu-item>
           <el-menu-item index="Notice">
             <i class="el-icon-setting"></i>
-            <span slot="title">医院公告</span>
+            <span slot="title">值班公告</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
@@ -53,14 +60,14 @@
         </el-header>
         <el-main>
           <div class="main">
-            <Notice v-show="nowCompoents == 'Notice'"></Notice>
+            <Notice ref="getWorforceData" v-show="nowCompoents == 'Notice'"></Notice>
             <Diagnose :nowUser="nowUser" v-show="nowCompoents == 'Diagnose'"></Diagnose>
             <MyInformation :nowUser="nowUser" v-show="nowCompoents == 'MyInformation'"></MyInformation>
             <Registration v-show="nowCompoents == 'Registration'"></Registration>
             <MyDepartment :nowUser="nowUser" v-show="nowCompoents == 'MyDepartment'"></MyDepartment>
             <MyPerformance :nowUser="nowUser" v-show="nowCompoents == 'MyPerformance'"></MyPerformance>
             <InpatientWard :nowUser="nowUser" v-show="nowCompoents == 'InpatientWard'"></InpatientWard>
-            <WorkforceManagement :nowUser="nowUser"  v-show="nowCompoents == 'WorkforceManagement'"></WorkforceManagement>
+            <WorkforceManagement :nowUser="nowUser" v-show="nowCompoents == 'WorkforceManagement'"></WorkforceManagement>
           </div>
         </el-main>
         <el-footer>东北林业大学2017级软件工程二班李一锋 权利所有</el-footer>
@@ -76,7 +83,7 @@ import Registration from '../components/Registration.vue';
 import MyDepartment from '../components/MyDepartment.vue';
 import MyPerformance from '../components/MyPerformance.vue';
 import InpatientWard from '../components/InpatientWard.vue';
-import WorkforceManagement from '../components/WorkforceManagement.vue'
+import WorkforceManagement from '../components/WorkforceManagement.vue';
 export default {
   components: {
     Notice,
@@ -86,7 +93,7 @@ export default {
     MyDepartment,
     MyPerformance,
     InpatientWard,
-    WorkforceManagement
+    WorkforceManagement,
   },
   data() {
     return {
@@ -95,12 +102,8 @@ export default {
     };
   },
   methods: {
-    changeCompoent(index) {
-      console.log(index);
-      this.nowCompoents = index;
-    },
     /**
-     * 登出函数 返回登陆的路由 同时清空缓存里的用户 加入患者数据
+     * 登出函数 返回登陆的路由 同时清空缓存里的用户
      * */
     exit() {
       sessionStorage.removeItem('user');
@@ -126,7 +129,7 @@ export default {
     }
   },
   created() {
-    var sessionUser = sessionStorage.getItem('user'); // 从缓存中取出当前的登陆职工信息
+    let sessionUser = sessionStorage.getItem('user'); // 从缓存中取出当前的登陆职工信息
     this.nowUser = JSON.parse(sessionUser);
   },
 };
@@ -172,5 +175,6 @@ export default {
 
 .exit {
   margin-left: 1rem;
+  /* height: 0.5em; */
 }
 </style>

@@ -12,7 +12,7 @@
 const user = [
   {
     id: 1002,
-    name: '曹操',
+    name: '徐继红',
     userName: '1001',
     password: '1001',
     department: 'internalMedicine',
@@ -25,7 +25,7 @@ const user = [
   },
   {
     id: 1003,
-    name: '赵云',
+    name: '于慧洋',
     userName: '1002',
     password: '1002',
     department: 'surgery',
@@ -38,7 +38,7 @@ const user = [
   },
   {
     id: 10030,
-    name: '吕布',
+    name: '张慧斌',
     userName: '10020',
     password: '10020',
     department: 'surgery',
@@ -51,7 +51,7 @@ const user = [
   },
   {
     id: 10031,
-    name: '黄忠',
+    name: '王树清',
     userName: '10021',
     password: '10021',
     department: 'surgery',
@@ -64,9 +64,22 @@ const user = [
   },
   {
     id: 1004,
-    name: '病房沈护士',
-    userName: '1',
-    password: '1',
+    name: '张磊',
+    userName: '10010',
+    password: '10010',
+    department: 'inpatientWard',
+    identity: 'leader',
+    workYears: 5,
+    workload: {
+      day: 22,
+      num: 20,
+    },
+  },
+  {
+    id: 10040,
+    name: '徐静',
+    userName: '10011',
+    password: '10011',
     department: 'inpatientWard',
     identity: 'nurse',
     workYears: 5,
@@ -76,8 +89,21 @@ const user = [
     },
   },
   {
+    id: 10041,
+    name: '张红英',
+    userName: '10012',
+    password: '10012',
+    department: 'inpatientWard',
+    identity: 'nurse',
+    workYears: 2,
+    workload: {
+      day: 21,
+      num: 10,
+    },
+  },
+  {
     id: 1005,
-    name: '挂号处李出纳',
+    name: '王静杰',
     userName: '2',
     password: '2',
     department: 'registration', //挂号处
@@ -90,7 +116,7 @@ const user = [
   },
   {
     id: 1006,
-    name: '挂号处张主任',
+    name: '张华义',
     userName: '3',
     password: '3',
     department: 'registration',
@@ -103,7 +129,7 @@ const user = [
   },
   {
     id: 1007,
-    name: '财务处王管理员',
+    name: '徐刚',
     userName: '4',
     password: '4',
     department: 'financeOffice',
