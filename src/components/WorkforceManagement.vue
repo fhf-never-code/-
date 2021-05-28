@@ -77,12 +77,15 @@ export default {
         var able = true;
         if (valid) {
           for (let item of this.$store.state.workforce) {
-            if (this.form.date == item.information.date && this.nowUser.department == item.information.department) {
+              console.log(item,this.nowUser.department)
+    
+            if (this.form.date == item.information.date && this.nowUser.department == item.department) {
               able = false;
                 this.$message({
                   message: '已有指定日期值班信息',
                   type: 'error'
                 });
+                break
             }
           }
           //在已有值班数据中检索未得到选定日期的值班数据时保存

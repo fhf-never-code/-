@@ -9,7 +9,8 @@
           <el-input type="textarea" autosize maxlength="300" v-model="form.clinicalSign" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="是否检查身体">
-          <el-switch v-model="form.check" active-color="#13ce66" inactive-color="#ff4949"> </el-switch>
+          <el-switch v-model="form.check" active-color="#13ce66" inactive-color="#ff4949" active-text="需要检查" inactive-text="无需检查">
+          </el-switch>
           <el-form-item v-show="form.check" label="身体检查状况">
             <el-input v-model="form.bodyCheck" autocomplete="off"></el-input>
           </el-form-item>
@@ -25,7 +26,7 @@
             <el-option label="住院处理" value="inHosipital"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="病人状态" prop="patientStatus">
+        <el-form-item label="患者状态" prop="patientStatus">
           <el-select v-model="form.patientStatus">
             <el-option label="待进一步处理" value="checked"></el-option>
             <el-option label="看诊完毕" value="finished"></el-option>
@@ -179,7 +180,7 @@ export default {
       for (let item of diagnose) {
         if (row.name == item.patientName) {
           this.form = item;
-          break
+          break;
         }
       }
     },

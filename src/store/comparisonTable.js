@@ -6,9 +6,12 @@ comparisonTable.set('internalMedicine', '内科')
 comparisonTable.set('surgery', '外科')
 comparisonTable.set('emergencyWard', '急诊科')
 comparisonTable.set('financeOffice', '财务处')
+comparisonTable.set('checkOffice','检查科')
+comparisonTable.set('pharmacy','药房')
 
 comparisonTable.set('doctor', '医生')
 comparisonTable.set('cashier', '收银员')
+comparisonTable.set('checker','检查员')
 comparisonTable.set('nurse', '护士')
 comparisonTable.set('leader', '科室主管')
 export default comparisonTable

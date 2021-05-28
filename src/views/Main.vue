@@ -34,15 +34,13 @@
             <i class="el-icon-document"></i>
             <span slot="title">病房管理</span>
           </el-menu-item>
+          <el-menu-item index="CheckManage" v-if="nowUser.department == 'checkOffice'">
+            <i class="el-icon-document"></i>
+            <span slot="title">检查管理</span>
+          </el-menu-item>
           <el-menu-item
             index="WorkforceManagement"
-            v-if="
-              nowUser.identity == 'leader' &&
-                (nowUser.department == 'inpatientWard' ||
-                  nowUser.department == 'surgery' ||
-                  nowUser.department == 'internalMedicine' ||
-                  nowUser.department == 'emergencyWard')
-            "
+            v-if="nowUser.identity == 'leader' && (nowUser.department == 'inpatientWard' || nowUser.department == 'emergencyWard')"
           >
             <i class="el-icon-document"></i>
             <span slot="title">排班管理</span>
@@ -50,6 +48,29 @@
           <el-menu-item index="Notice">
             <i class="el-icon-setting"></i>
             <span slot="title">值班公告</span>
+          </el-menu-item>
+          <el-menu-item
+            index="ItemSupplement"
+            v-if="nowUser.department == 'inpatientWard' || nowUser.department == 'internalMedicine' || nowUser.department == 'checkOffice'"
+          >
+            <i class="el-icon-setting"></i>
+            <span slot="title">物品申请</span>
+          </el-menu-item>
+           <el-menu-item index="GrantItem" v-if="nowUser.department == 'financeOffice'">
+            <i class="el-icon-document"></i>
+            <span slot="title">物品发放</span>
+          </el-menu-item>
+          <el-menu-item index="PerformanceManagement" v-if="nowUser.department == 'financeOffice'">
+            <i class="el-icon-star-on"></i>
+            <span slot="title">绩效管理</span>
+          </el-menu-item>
+          <el-menu-item index="PerformanceManagement" v-if="nowUser.department == 'financeOffice'">
+            <i class="el-icon-info"></i>
+            <span slot="title">账目核查</span>
+          </el-menu-item>
+            <el-menu-item index="MedicineManage" v-if="nowUser.department == 'pharmacy'">
+            <i class="el-icon-info"></i>
+            <span slot="title">药品管理</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
@@ -68,6 +89,10 @@
             <MyPerformance :nowUser="nowUser" v-show="nowCompoents == 'MyPerformance'"></MyPerformance>
             <InpatientWard :nowUser="nowUser" v-show="nowCompoents == 'InpatientWard'"></InpatientWard>
             <WorkforceManagement :nowUser="nowUser" v-show="nowCompoents == 'WorkforceManagement'"></WorkforceManagement>
+            <ItemSupplement :nowUser="nowUser" v-show="nowCompoents == 'ItemSupplement'"></ItemSupplement>
+            <CheckManage :nowUser="nowUser" v-show="nowCompoents == 'CheckManage'"></CheckManage>
+            <GrantItem :nowUser="nowUser" v-show="nowCompoents == 'GrantItem'"></GrantItem>
+            <MedicineManage :nowUser="nowUser" v-show="nowCompoents == 'MedicineManage'"></MedicineManage>
           </div>
         </el-main>
         <el-footer>东北林业大学2017级软件工程二班李一锋 权利所有</el-footer>
@@ -84,6 +109,10 @@ import MyDepartment from '../components/MyDepartment.vue';
 import MyPerformance from '../components/MyPerformance.vue';
 import InpatientWard from '../components/InpatientWard.vue';
 import WorkforceManagement from '../components/WorkforceManagement.vue';
+import ItemSupplement from '../components/ItemSupplement.vue';
+import CheckManage from '../components/CheckManage';
+import GrantItem from '../components/GrantItem'
+import MedicineManage from '../components/MedicineManage'
 export default {
   components: {
     Notice,
@@ -94,6 +123,10 @@ export default {
     MyPerformance,
     InpatientWard,
     WorkforceManagement,
+    ItemSupplement,
+    CheckManage,
+    GrantItem,
+    MedicineManage
   },
   data() {
     return {
