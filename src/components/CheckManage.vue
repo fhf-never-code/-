@@ -16,8 +16,8 @@
             <el-input v-model="item.checkName"></el-input>
           </el-form-item>
           <el-form-item>
-          <el-button type="danger" @click="removeItem(index)">删除检查项</el-button>
-        </el-form-item>
+            <el-button type="danger" @click="removeItem(index)">删除检查项</el-button>
+          </el-form-item>
         </div>
         <el-form-item>
           <el-button type="success" @click="addCheckItem">新增检查项</el-button>
@@ -39,7 +39,7 @@
         >保存检查单</el-button
       >
     </el-dialog>
-    <el-dialog title="上传检查结果" :visible.sync="form2isible">
+    <el-dialog title="检查结果" :visible.sync="form2isible">
       <el-form :inline="true" :model="form2" ref="form2" class="form">
         <el-form-item label="当前患者:">
           {{ form2.patientName }}
@@ -49,7 +49,7 @@
             {{ item.checkName }}
           </el-form-item>
           <el-form-item label="检查结果:">
-            <el-input v-model="item.checkData"></el-input>
+            <el-input :disabled="noInput" v-model="item.checkData"></el-input>
           </el-form-item>
         </div>
       </el-form>
@@ -90,9 +90,9 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="getCheck(scope.row)" v-show="!scope.row.checkStatus">进行检查</el-button>
-          <el-button size="mini" @click="uploadResult(scope.row)" v-show="scope.row.checkStatus == 'uploading'">上传结果</el-button>
-          <el-button size="mini" @click="getResult(scope.row)" v-show="scope.row.checkStatus == 'uploaded'">查看结果</el-button>
+          <el-button size="mini" type="goon" @click="getCheck(scope.row)" v-show="!scope.row.checkStatus">进行检查</el-button>
+          <el-button size="mini" type="goon" @click="uploadResult(scope.row)" v-show="scope.row.checkStatus == 'uploading'">上传结果</el-button>
+          <el-button size="mini" type="goon" @click="getResult(scope.row)" v-show="scope.row.checkStatus == 'uploaded'">查看结果</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -108,6 +108,7 @@ export default {
       patientList: [],
       dialogFormVisible: false,
       form2isible: false,
+      noInput: false,
       form: {
         patientName: '',
         clinicalSign: '',
@@ -122,9 +123,6 @@ export default {
       formLabelWidth: '120px',
     };
   },
-  computed: {},
-  watch: {},
-  //方法集合
   methods: {
     //拿到需要检查的患者列表
     getPatientList() {
@@ -181,6 +179,7 @@ export default {
     //点击上传检查结果
     uploadResult(row) {
       this.form2isible = true;
+      this.noInput = false
       let checkResult = JSON.parse(JSON.stringify(this.$store.state.checkResult));
       for (let item of checkResult) {
         if (item.patientName == row.name) {
@@ -190,7 +189,8 @@ export default {
     },
     //点击查看检查结果
     getResult() {
-      console.log(this.$store.state.checkResult);
+      this.form2isible = true;
+      this.noInput = true;
     },
     //新增检查项
     addCheckItem() {
@@ -200,7 +200,7 @@ export default {
     },
     //删除检查项
     removeItem(index) {
-      this.form.checkItem.splice(index,1)
+      this.form.checkItem.splice(index, 1);
     },
     //点击保存检查单
     submitForm() {
@@ -229,9 +229,7 @@ export default {
           this.$set(item, 'checkStatus', 'uploaded');
         }
       }
-      // console.log(this.form2)
       this.$store.commit(UPDATECHECKRESULT, this.form2);
-      // console.log(this.$store.state.checkResult)
     },
     // 转化科室名称
     getDepartment(value) {
@@ -268,4 +266,24 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.el-button--goon.is-active,
+.el-button--goon:active {
+  background: #20B2AA;
+  border-color: #20B2AA;
+  color: #fff;
+}
+
+.el-button--goon:focus,
+.el-button--goon:hover {
+  background: #48D1CC;
+  border-color: #48D1CC;
+  color: #fff;
+}
+
+.el-button--goon {
+  color: #FFF;
+  background-color: #20B2AA;
+  border-color: #20B2AA;
+}
+</style>

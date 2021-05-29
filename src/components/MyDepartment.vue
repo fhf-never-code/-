@@ -2,10 +2,10 @@
   <div class="container">
     <div class="form">
       <el-table :data="colleague" stripe style="width: 100%" border>
-        <el-table-column prop="department" label="科室" width="180"> </el-table-column>
-        <el-table-column prop="name" label="姓名" width="180"> </el-table-column>
-        <el-table-column prop="identity" label="职务" width="180"> </el-table-column>
-        <el-table-column prop="workYears" label="工龄(年)" width="180" sortable> </el-table-column>
+        <el-table-column prop="department" label="科室" width="300"> </el-table-column>
+        <el-table-column prop="name" label="姓名" width="300"> </el-table-column>
+        <el-table-column prop="identity" label="职务" width="300"> </el-table-column>
+        <el-table-column prop="workYears" label="工龄(年)" width="300" sortable> </el-table-column>
       </el-table>
     </div>
   </div>
@@ -19,10 +19,6 @@ export default {
       colleague: [],
     };
   },
-  //监听属性 类似于data概念
-  computed: {},
-  //监控data中的数据变化
-  watch: {},
   //方法集合
   methods: {
     // 在数据库里找同部门的同事

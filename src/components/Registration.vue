@@ -124,6 +124,7 @@ export default {
     /*点击编辑病历
      */
     handleEdit(row) {
+      console.log(row)
       this.dialogFormVisible = true;
       this.form.IDnum = row.IDnum;
       this.form.sex = row.sex;

@@ -10,6 +10,7 @@ import diagnose from './diagnose';
 import inpatientWard from './inpatientWard';
 import item from './item';
 import checkResult from './checkResult';
+import giveMedicine from './giveMedicine'
 Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
@@ -22,6 +23,7 @@ const store = new Vuex.Store({
     inpatientWard, // 病房
     item, // 物品补充清单
     checkResult, // 检查结果
+    giveMedicine, // 发药单
   },
   mutations: {
     //更新员工信息
@@ -99,6 +101,9 @@ const store = new Vuex.Store({
         }
       }
     },
+    [types.ADDGIVEMEDICINE] (state,data) {
+      state.giveMedicine.push(data)
+    }
   },
 });
 export default store;

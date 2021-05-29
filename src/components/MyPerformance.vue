@@ -52,10 +52,6 @@ export default {
       },
     };
   },
-  //监听属性 类似于data概念
-  computed: {},
-  //监控data中的数据变化
-  watch: {},
   //方法集合
   methods: {
     /* 绩效管理 暂时先写一些根据职务和工龄获得的奖励 不分部门*/
