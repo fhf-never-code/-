@@ -91,6 +91,7 @@
   </div>
 </template>
 <script>
+import { ADDGIVEMEDICINE } from '../store/types'
 export default {
   props: ['nowUser'],
   data() {
@@ -211,7 +212,8 @@ export default {
        price :   this.totalPrice,
        giveMedicine :this.giveMedicineForm
       }
-      console.log(giveMedicine)
+      this.$store.commit(ADDGIVEMEDICINE,giveMedicine)
+      console.log(this.$store.state.giveMedicine)
     }
     // //初始化注入选项
     // getOptionList() {
