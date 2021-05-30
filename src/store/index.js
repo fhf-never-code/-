@@ -10,7 +10,7 @@ import diagnose from './diagnose';
 import inpatientWard from './inpatientWard';
 import item from './item';
 import checkResult from './checkResult';
-import giveMedicine from './giveMedicine'
+import giveMedicine from './giveMedicine';
 Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
@@ -101,9 +101,19 @@ const store = new Vuex.Store({
         }
       }
     },
-    [types.ADDGIVEMEDICINE] (state,data) {
-      state.giveMedicine.push(data)
-    }
+    [types.ADDGIVEMEDICINE](state, data) {
+      state.giveMedicine.push(data);
+      for (let item of data.giveMedicine.medicineItem) {
+        for (let medicine of state.medicine) {
+          if (medicine.medicineName == item.medicineName) {
+            console.log(item,medicine)
+              medicine.medicineNum -= item.medicineNum
+              medicine.medicineSales +=item.medicineNum
+              break
+          }
+        }
+      }
+    },
   },
 });
 export default store;

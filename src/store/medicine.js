@@ -2,6 +2,8 @@
 isOTC 是否为处方药 
 isExchange 是否可退换 
 extraInformation 额外信息
+medicineNum 库存量
+medicineSales 销售量
  */
 const medicine = [
   {

@@ -21,7 +21,7 @@
             </el-switch>
           </el-form-item>
           <el-form-item label="发药数量:">
-            <el-input-number v-model="item2.medicineNum" :min="1" :max="item2.maxNum" @change="handleChange(index2)"></el-input-number>
+            <el-input-number v-model="item2.medicineNum" :min="0" :max="item2.maxNum" @change="handleChange(index2)"></el-input-number>
           </el-form-item>
           <el-form-item label="价格:">
             {{ item2.totalPrice }}
@@ -47,8 +47,7 @@
       >
     </el-dialog>
     <el-dialog title="收费" :visible.sync="confirmRegistration">
-    <div class="buttonArea"> 应对患者进行收费: {{totalPrice}} 元
-      </div> 
+      <div class="buttonArea">应对患者进行收费: {{ totalPrice }} 元</div>
       <el-button
         @click="
           confirmRegistration = false;
@@ -56,7 +55,7 @@
         "
         >取消</el-button
       >
-       <el-button
+      <el-button
         type="primary"
         @click="
           confirmRegistration = false;
@@ -91,7 +90,7 @@
   </div>
 </template>
 <script>
-import { ADDGIVEMEDICINE } from '../store/types'
+import { ADDGIVEMEDICINE } from '../store/types';
 export default {
   props: ['nowUser'],
   data() {
@@ -113,15 +112,16 @@ export default {
       maxNum: 10,
       dialogFormVisible: false,
       confirmRegistration: false,
-      totalPrice:0,
+      totalPrice: 0,
     };
   },
   computed: {},
-  watch: {
-    'this.$store.state.medicine'() {
-      this.getMedicineList();
-    },
-  },
+  // watch: {
+  //   'this.$store.state.medicine'() {
+  //     console.log('触发刷新表单');
+  //     this.getMedicineList();
+  //   },
+  // },
   methods: {
     // 拿到所有药品的列表
     getMedicineList() {
@@ -155,13 +155,27 @@ export default {
           },
         ],
       };
+      this.totalPrice = 0;
     },
     //点击发药
     submitForm() {
+      let set = new Set();
       for (let item of this.giveMedicineForm.medicineItem) {
-          this.totalPrice +=item.totalPrice
+        set.add(item.medicineName);
       }
-      this.confirmRegistration = true
+      let setArr = Array.from(set);
+      //经过set去重检查是否表单中有一种药品占两个发药项
+      if (this.giveMedicineForm.medicineItem.length == setArr.length) {
+        for (let item of this.giveMedicineForm.medicineItem) {
+          this.totalPrice += item.totalPrice;
+        }
+        this.confirmRegistration = true;
+      } else {
+        this.$message({
+          message: '不能两次发同种药品',
+          type: 'error',
+        });
+      }
     },
     //拿到选择的药品 反馈是否是处方药 根据药品库存动态绑定最大发药量 自动生成对应的药品总价
     getIsOTC(value) {
@@ -172,7 +186,7 @@ export default {
         if (item.medicineName == chooseMedicine.medicineName) {
           chooseMedicine.isOTC = item.isOTC;
           chooseMedicine.maxNum = item.medicineNum;
-          chooseMedicine.medicineNum = 1;
+          chooseMedicine.medicineNum = 0;
         }
       }
       this.handleChange(value);
@@ -209,16 +223,17 @@ export default {
     //保存发药内容
     saveGiveMedicine() {
       let giveMedicine = {
-       price :   this.totalPrice,
-       giveMedicine :this.giveMedicineForm
-      }
-      this.$store.commit(ADDGIVEMEDICINE,giveMedicine)
-      console.log(this.$store.state.giveMedicine)
-    }
-    // //初始化注入选项
-    // getOptionList() {
-    //   this.optionList = this.medicineList
-    // },
+        price: this.totalPrice,
+        giveMedicine: this.giveMedicineForm,
+      };
+      this.$store.commit(ADDGIVEMEDICINE, giveMedicine);
+      this.$message({
+        message: '成功保存发药信息',
+        type: 'success',
+      });
+      this.totalPrice = 0;
+      this.getMedicineList()
+},
   },
   created() {
     this.getMedicineList();
@@ -231,6 +246,8 @@ export default {
 <style scoped>
 .container {
   display: flex;
+  justify-content: center;
+  align-content: center;
 }
 .el-button--goon.is-active,
 .el-button--goon:active {
@@ -252,5 +269,8 @@ export default {
 }
 .buttonArea {
   margin-bottom: 16px;
+}
+.el-button {
+  margin-left: 20px;
 }
 </style>
