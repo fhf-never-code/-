@@ -88,6 +88,7 @@ const store = new Vuex.Store({
     [types.DELETEITEM](state, index) {
       state.item.splice(index, 1);
     },
+    //添加检查项目
     [types.ADDCHECKRESULT](state, data) {
       if (!state.checkResult.includes(data)) {
         state.checkResult.push(data);
@@ -101,16 +102,64 @@ const store = new Vuex.Store({
         }
       }
     },
+    //添加发药记录 同时更新药品的销售量与库存量
     [types.ADDGIVEMEDICINE](state, data) {
       state.giveMedicine.push(data);
       for (let item of data.giveMedicine.medicineItem) {
         for (let medicine of state.medicine) {
           if (medicine.medicineName == item.medicineName) {
-            console.log(item,medicine)
-              medicine.medicineNum -= item.medicineNum
-              medicine.medicineSales +=item.medicineNum
-              break
+            medicine.medicineNum -= item.medicineNum;
+            medicine.medicineSales += item.medicineNum;
+            break;
           }
+        }
+      }
+    },
+    //添加退药记录 同时更新发药记录中的发药记录部分 若退全部直接 删除该发药项 否则只做数量修改 然后更新药品的销售量与库存量
+    [types.ADDRETURNMEDICINE](state, data) {
+      for (let item of state.giveMedicine) {
+        if (item.giveMedicine.patientName == data.patientName) {
+          for (let index in item.giveMedicine.medicineItem) {
+            for (let index2 in data.returnItem) {
+              //  对比退药信息和发药信息同名且数量为发药量的 直接删除对应的发药信息
+              if (
+                item.giveMedicine.medicineItem[index].medicineName == data.returnItem[index2].giveMedicineRecord.medicineName &&
+                item.giveMedicine.medicineItem[index].medicineNum == data.returnItem[index2].returnNum
+              ) {
+                //  在药品单中找到对应的药品 恢复退药的库存 减去销售量
+                for (let medicine of state.medicine) {
+                  if (medicine.medicineName == data.returnItem[index2].giveMedicineRecord.medicineName) {
+                    medicine.medicineNum += data.returnItem[index2].returnNum;
+                    medicine.medicineSales -= data.returnItem[index2].returnNum;
+                    break;
+                  }
+                }
+                item.giveMedicine.medicineItem.splice(index, 1);
+                break;
+              }
+              //当退部分药品时
+              else if (item.giveMedicine.medicineItem[index].medicineName == data.returnItem[index2].giveMedicineRecord.medicineName) {
+                item.giveMedicine.medicineItem[index].medicineNum -= data.returnItem[index2].returnNum;
+                //  在药品单中找到对应的药品 恢复退药的库存 减去销售量
+                for (let medicine of state.medicine) {
+                  if (medicine.medicineName == data.returnItem[index2].giveMedicineRecord.medicineName) {
+                    medicine.medicineNum += data.returnItem[index2].returnNum;
+                    medicine.medicineSales -= data.returnItem[index2].returnNum;
+                    break;
+                  }
+                }
+                break;
+              }
+            }
+          }
+        }
+      }
+    },
+    //如果发放物品时药品则对药品的存量进行补充
+    [types.GRANTMEDICINE](state, data) {
+      for (let item of state.medicine) {
+        if (data.medicineName == item.medicineName) {
+          item.medicineNum += data.medicineNum;
         }
       }
     },

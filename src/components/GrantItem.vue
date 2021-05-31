@@ -10,13 +10,13 @@
           <el-input v-model="item.department" disabled></el-input>
         </el-form-item>
         <div v-for="(item2, index2) in item.form.information" :key="index2">
-          <el-form-item  label="物品名称">
+          <el-form-item label="物品名称">
             <el-input v-model="item2.itemName" disabled></el-input>
           </el-form-item>
-          <el-form-item  label="物品种类">
+          <el-form-item label="物品种类">
             <el-input v-model="item2.itemType" disabled></el-input>
           </el-form-item>
-          <el-form-item  label="物品数量">
+          <el-form-item label="物品数量">
             <el-input v-model="item2.itemNum" disabled></el-input>
           </el-form-item>
         </div>
@@ -27,7 +27,7 @@
   </div>
 </template>
 <script>
-import { DELETEITEM } from '@/store/types';
+import { DELETEITEM, GRANTMEDICINE } from '@/store/types';
 export default {
   props: ['nowUser'],
   data() {
@@ -59,7 +59,22 @@ export default {
     //确认发放删除该信息
     confirmGrant(index) {
       this.$store.commit(DELETEITEM, index);
-      this.getItem();
+      let information = this.form.itemList[index].form.information;
+      for (let item of information) {
+        if (item.itemType == '药品') {
+          let obj = {
+            medicineName: item.itemName,
+            medicineNum: parseInt(item.itemNum) ,
+          };
+          this.$store.commit(GRANTMEDICINE, obj);
+          this.getItem()
+        }
+      }
+      this.$message({
+        message: '物品补充成功',
+        type: 'success',
+      });
+     
     },
   },
   created() {

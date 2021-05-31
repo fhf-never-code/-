@@ -51,7 +51,7 @@
           </el-menu-item>
           <el-menu-item
             index="ItemSupplement"
-            v-if="nowUser.department == 'inpatientWard' || nowUser.department == 'internalMedicine' || nowUser.department == 'checkOffice'"
+            v-if="nowUser.department == 'inpatientWard' || nowUser.department == 'pharmacy' || nowUser.department == 'checkOffice'"
           >
             <i class="el-icon-setting"></i>
             <span slot="title">物品申请</span>

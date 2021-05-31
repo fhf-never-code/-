@@ -64,6 +64,30 @@
         >收费完成</el-button
       >
     </el-dialog>
+    <el-dialog title="退药" :visible.sync="returnMedicineIsVisible">
+      <el-form :inline="true" :model="returnMedicineForm">
+        <el-form-item label="请输入患者姓名进行查询:">
+          <el-input v-model="returnMedicineForm.patientName" clearable> </el-input>
+        </el-form-item>
+        <el-button @click="getSearch" v-loading.fullscreen.lock="fullscreenLoading"> 查询</el-button>
+        <el-button type="goon" @click="closeReturnMedicine"> 取消 </el-button>
+        <div v-show="canSee" v-for="(item, index) in returnMedicineForm.giveMedicineRecord" :key="index">
+          <el-form-item>
+            药品名: {{ item.medicineName }} 发药数量 : {{ item.medicineNum }} 是否可以退换: {{ changeDisplay(item.isExchange) }}
+          </el-form-item>
+          <el-form-item label="选择退药数量:" v-show="item.isExchange">
+            <el-input-number
+              size="small"
+              v-model="returnMedicineForm.returnMedicineItem[index]"
+              @change="outPut"
+              :min="0"
+              :max="item.medicineNum"
+            ></el-input-number>
+          </el-form-item>
+        </div>
+        <el-button @click="confirmReturnMedicine" v-show="returnMedicineForm.returnMedicineItem.length != 0">确认退药</el-button>
+      </el-form>
+    </el-dialog>
     <div>
       <div class="buttonArea">
         <el-button type="goon" @click="giveMedicine">发药 </el-button>
@@ -90,7 +114,7 @@
   </div>
 </template>
 <script>
-import { ADDGIVEMEDICINE } from '../store/types';
+import { ADDGIVEMEDICINE, ADDRETURNMEDICINE } from '../store/types';
 export default {
   props: ['nowUser'],
   data() {
@@ -109,19 +133,20 @@ export default {
           },
         ],
       },
+      returnMedicineForm: {
+        patientName: '',
+        giveMedicineRecord: [], //记录患者的发药记录
+        returnMedicineItem: [], //记录选择的退药信息
+      },
       maxNum: 10,
-      dialogFormVisible: false,
-      confirmRegistration: false,
+      dialogFormVisible: false, // 选择发药项界面
+      confirmRegistration: false, //确认发药界面
+      returnMedicineIsVisible: false, //退药界面
+      fullscreenLoading: false, //是否启动加载中
+      canSee: false, //手动控制拿到数据时间
       totalPrice: 0,
     };
   },
-  computed: {},
-  // watch: {
-  //   'this.$store.state.medicine'() {
-  //     console.log('触发刷新表单');
-  //     this.getMedicineList();
-  //   },
-  // },
   methods: {
     // 拿到所有药品的列表
     getMedicineList() {
@@ -140,7 +165,14 @@ export default {
       this.clearForm();
     },
     //退药
-    returnMedicine() {},
+    returnMedicine() {
+      this.returnMedicineIsVisible = true;
+      this.returnMedicineForm = {
+        patientName: '',
+        giveMedicineRecord: [],
+        returnMedicineItem: [],
+      };
+    },
     //清空表单
     clearForm() {
       this.giveMedicineForm = {
@@ -185,6 +217,7 @@ export default {
       for (let item of medicine) {
         if (item.medicineName == chooseMedicine.medicineName) {
           chooseMedicine.isOTC = item.isOTC;
+          chooseMedicine.isExchange = item.isExchange;
           chooseMedicine.maxNum = item.medicineNum;
           chooseMedicine.medicineNum = 0;
         }
@@ -193,6 +226,7 @@ export default {
     },
     //新增发药项
     addGiveMedicineItem() {
+      //检查发药项是否大于药品总数
       if (this.giveMedicineForm.medicineItem.length <= this.medicineList.length) {
         this.giveMedicineForm.medicineItem.push({
           medicineName: '',
@@ -232,14 +266,69 @@ export default {
         type: 'success',
       });
       this.totalPrice = 0;
-      this.getMedicineList()
-},
+      this.getMedicineList();
+    },
+    //退药界面选择查询发药信息
+    getSearch() {
+      this.returnMedicineForm.giveMedicineRecord = [];
+      this.fullscreenLoading = true;
+      setTimeout(() => {
+        this.fullscreenLoading = false;
+        this.canSee = true;
+        // this.returnMedicineIsVisible = false
+        // this.dialogFormVisible = true
+      }, 1000);
+      for (let item of this.$store.state.giveMedicine) {
+        if (this.returnMedicineForm.patientName == item.giveMedicine.patientName) {
+          for (let item2 of item.giveMedicine.medicineItem) {
+            let obj = item2;
+            this.returnMedicineForm.giveMedicineRecord.push(obj);
+            this.returnMedicineForm.returnMedicineItem.push(0);
+          }
+        }
+      }
+    },
+    //关闭退药界面
+    closeReturnMedicine() {
+      this.returnMedicineIsVisible = false;
+      this.returnMedicineForm = {
+        patientName: '',
+        giveMedicineRecord: [],
+        returnMedicineItem: [],
+      };
+    },
+    //退药选择计数器
+    outPut() {
+      //returnMedicineItem数组仅记录发药信息中药品的下标的计数器数量  在调用发药信息合成对象对应就可以拿到对应的退药信息
+      // console.log(this.returnMedicineForm.returnMedicineItem);
+    },
+    //确认退药按钮
+    confirmReturnMedicine() {
+      let obj = {
+        patientName: this.returnMedicineForm.patientName,
+        returnItem: [],
+      };
+      for (let index in this.returnMedicineForm.giveMedicineRecord) {
+        if (this.returnMedicineForm.giveMedicineRecord[index].isExchange == true) {
+          let item = this.returnMedicineForm.giveMedicineRecord[index];
+          let obj2 = {
+            giveMedicineRecord: item,
+            returnNum: this.returnMedicineForm.returnMedicineItem[index],
+          };
+          obj.returnItem.push(obj2);
+        }
+      }
+      this.$store.commit(ADDRETURNMEDICINE, obj);
+      this.returnMedicineIsVisible = false;
+      this.getMedicineList();
+      this.$message({
+        message: '成功退药',
+        type: 'success',
+      });
+    },
   },
   created() {
     this.getMedicineList();
-  },
-  mounted() {
-    // this.getOptionList()
   },
 };
 </script>
