@@ -11,6 +11,7 @@ import inpatientWard from './inpatientWard';
 import item from './item';
 import checkResult from './checkResult';
 import giveMedicine from './giveMedicine';
+import checkAccount from './checkAccount'
 Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
@@ -24,6 +25,7 @@ const store = new Vuex.Store({
     item, // 物品补充清单
     checkResult, // 检查结果
     giveMedicine, // 发药单
+    checkAccount, //查账记录
   },
   mutations: {
     //更新员工信息

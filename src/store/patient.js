@@ -28,7 +28,7 @@ const patient = [{
     IDnum: '69151020010715831X',
     sex: 'female',
     targetDepartment: 'surgery',
-    time: '2021-05-31 20:32:13',
+    time: '2021-06-02 20:32:13',
     status: 'unchecked',
 },]
 export default patient

@@ -64,7 +64,7 @@
             <i class="el-icon-star-on"></i>
             <span slot="title">绩效管理</span>
           </el-menu-item>
-          <el-menu-item index="PerformanceManagement" v-if="nowUser.department == 'financeOffice'">
+          <el-menu-item index="CheckAccount" v-if="nowUser.department == 'financeOffice'">
             <i class="el-icon-info"></i>
             <span slot="title">账目核查</span>
           </el-menu-item>
@@ -93,6 +93,8 @@
             <CheckManage :nowUser="nowUser" v-show="nowCompoents == 'CheckManage'"></CheckManage>
             <GrantItem :nowUser="nowUser" v-show="nowCompoents == 'GrantItem'"></GrantItem>
             <MedicineManage :nowUser="nowUser" v-show="nowCompoents == 'MedicineManage'"></MedicineManage>
+            <PerformanceManagement :nowUser="nowUser" v-show="nowCompoents == 'PerformanceManagement'" > </PerformanceManagement>
+            <CheckAccount :nowUser="nowUser" v-show="nowCompoents == 'CheckAccount'" > </CheckAccount>
           </div>
         </el-main>
         <el-footer>东北林业大学2017级软件工程二班李一锋 权利所有</el-footer>
@@ -113,20 +115,24 @@ import ItemSupplement from '../components/ItemSupplement.vue';
 import CheckManage from '../components/CheckManage';
 import GrantItem from '../components/GrantItem'
 import MedicineManage from '../components/MedicineManage'
+import PerformanceManagement from '../components/PerformanceManagement'
+import CheckAccount from '../components/CheckAccount'
 export default {
   components: {
-    Notice,
-    Diagnose,
-    MyInformation,
-    Registration,
-    MyDepartment,
-    MyPerformance,
-    InpatientWard,
-    WorkforceManagement,
-    ItemSupplement,
-    CheckManage,
-    GrantItem,
-    MedicineManage
+    Notice, // 通知  
+    Diagnose, // 看诊
+    MyInformation,  // 个人信息
+    Registration, //挂号管理
+    MyDepartment, //我的部门
+    MyPerformance, // 我的绩效
+    InpatientWard,  // 病房管理
+    WorkforceManagement, // 值班管理
+    ItemSupplement, // 物品申请
+    CheckManage,  // 检查管理
+    GrantItem, // 物品发放
+    MedicineManage, // 
+    PerformanceManagement, // 绩效管理
+    CheckAccount // 查账管理
   },
   data() {
     return {

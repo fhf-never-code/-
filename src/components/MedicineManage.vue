@@ -79,7 +79,6 @@
             <el-input-number
               size="small"
               v-model="returnMedicineForm.returnMedicineItem[index]"
-              @change="outPut"
               :min="0"
               :max="item.medicineNum"
             ></el-input-number>
@@ -87,6 +86,11 @@
         </div>
         <el-button @click="confirmReturnMedicine" v-show="returnMedicineForm.returnMedicineItem.length != 0">确认退药</el-button>
       </el-form>
+    </el-dialog>
+    <el-dialog title="退药退款" :visible.sync="confirmReturn">
+      <div class="buttonArea">应对患者进行退费: {{ returnPrice }} 元</div>
+      <el-button @click="clearForm2()">取消</el-button>
+      <el-button type="primary" @click="returnMedicinePrice()">确认退费</el-button>
     </el-dialog>
     <div>
       <div class="buttonArea">
@@ -142,9 +146,11 @@ export default {
       dialogFormVisible: false, // 选择发药项界面
       confirmRegistration: false, //确认发药界面
       returnMedicineIsVisible: false, //退药界面
+      confirmReturn: false, //确认退药界面
       fullscreenLoading: false, //是否启动加载中
       canSee: false, //手动控制拿到数据时间
       totalPrice: 0,
+      returnPrice: 0,
     };
   },
   methods: {
@@ -173,7 +179,7 @@ export default {
         returnMedicineItem: [],
       };
     },
-    //清空表单
+    //清空发药表单
     clearForm() {
       this.giveMedicineForm = {
         patientName: '',
@@ -188,6 +194,16 @@ export default {
         ],
       };
       this.totalPrice = 0;
+    },
+    //清空退药表单
+    clearForm2() {
+      this.confirmReturn = false;
+      this.returnPrice = 0;
+      this.returnMedicineForm = {
+        patientName: '',
+        giveMedicineRecord: [], //记录患者的发药记录
+        returnMedicineItem: [], //记录选择的退药信息
+      };
     },
     //点击发药
     submitForm() {
@@ -256,9 +272,22 @@ export default {
     },
     //保存发药内容
     saveGiveMedicine() {
+      let day = new Date();
+      let year = day.getFullYear();
+      let month = day.getMonth() + 1;
+      if (month < 10) {
+        month = '0' + month;
+      }
+      let today = day.getDate();
+      if (today < 10) {
+        today = '0' + today;
+      }
+      //拿到今天的标准格式日期
+      let date = `${year}-${month}-${today}`;
       let giveMedicine = {
         price: this.totalPrice,
         giveMedicine: this.giveMedicineForm,
+        giveMedicineDate: date,
       };
       this.$store.commit(ADDGIVEMEDICINE, giveMedicine);
       this.$message({
@@ -275,8 +304,6 @@ export default {
       setTimeout(() => {
         this.fullscreenLoading = false;
         this.canSee = true;
-        // this.returnMedicineIsVisible = false
-        // this.dialogFormVisible = true
       }, 1000);
       for (let item of this.$store.state.giveMedicine) {
         if (this.returnMedicineForm.patientName == item.giveMedicine.patientName) {
@@ -297,13 +324,23 @@ export default {
         returnMedicineItem: [],
       };
     },
-    //退药选择计数器
-    outPut() {
-      //returnMedicineItem数组仅记录发药信息中药品的下标的计数器数量  在调用发药信息合成对象对应就可以拿到对应的退药信息
-      // console.log(this.returnMedicineForm.returnMedicineItem);
-    },
     //确认退药按钮
     confirmReturnMedicine() {
+      this.confirmReturn = true;
+      for (let index in this.returnMedicineForm.giveMedicineRecord) {
+        if (this.returnMedicineForm.giveMedicineRecord[index].isExchange == true) {
+          let item = this.returnMedicineForm.giveMedicineRecord[index];
+          for (let medicine of this.$store.state.medicine) {
+            if (medicine.medicineName == item.medicineName) {
+              let price = medicine.medicinePrice * this.returnMedicineForm.returnMedicineItem[index];
+              this.returnPrice += price;
+            }
+          }
+        }
+      }
+    },
+    //确认退药相关功能
+    returnMedicinePrice() {
       let obj = {
         patientName: this.returnMedicineForm.patientName,
         returnItem: [],
@@ -325,6 +362,7 @@ export default {
         message: '成功退药',
         type: 'success',
       });
+      this.confirmReturn = false;
     },
   },
   created() {

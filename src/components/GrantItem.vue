@@ -2,7 +2,7 @@
   <div class="container">
     <el-form :model="form" ref="form" label-width="120px">
       <h1 v-if="form.itemList.length == 0">暂无物品补充申请</h1>
-      <div v-for="(item, index) in form.itemList" :key="index">
+      <div v-for="(item, index) in form.itemList" :key="index" class="form">
         <el-form-item label="申请人">
           <el-input v-model="item.userName" disabled></el-input>
         </el-form-item>
@@ -20,8 +20,8 @@
             <el-input v-model="item2.itemNum" disabled></el-input>
           </el-form-item>
         </div>
-        <el-button @click="confirmGrant(index)">确认发放</el-button>
         <el-divider></el-divider>
+        <el-button @click="confirmGrant(index)">确认发放</el-button>
       </div>
     </el-form>
   </div>
@@ -64,17 +64,16 @@ export default {
         if (item.itemType == '药品') {
           let obj = {
             medicineName: item.itemName,
-            medicineNum: parseInt(item.itemNum) ,
+            medicineNum: parseInt(item.itemNum),
           };
           this.$store.commit(GRANTMEDICINE, obj);
-          this.getItem()
+          this.getItem();
         }
       }
       this.$message({
         message: '物品补充成功',
         type: 'success',
       });
-     
     },
   },
   created() {
@@ -87,5 +86,10 @@ export default {
   display: flex;
   justify-content: center;
   align-items: flex-start;
+}
+.form {
+  padding: 100px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
 }
 </style>
