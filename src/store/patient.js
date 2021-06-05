@@ -21,14 +21,14 @@ const patient = [{
     IDnum: '35165820050515831X',
     sex: 'female',
     targetDepartment: 'surgery',
-    time: '2021-05-29 20:35:23',
+    time: '2021-06-03 20:35:23',
     status: 'finished',
 }, {
     name: '盛华依',
     IDnum: '69151020010715831X',
     sex: 'female',
     targetDepartment: 'surgery',
-    time: '2021-06-02 20:32:13',
+    time: '2021-06-05 20:32:13',
     status: 'unchecked',
 },]
 export default patient

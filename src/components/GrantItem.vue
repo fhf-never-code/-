@@ -21,7 +21,7 @@
           </el-form-item>
         </div>
         <el-divider></el-divider>
-        <el-button @click="confirmGrant(index)">确认发放</el-button>
+        <el-button type="goon" @click="confirmGrant(index)">确认发放</el-button>
       </div>
     </el-form>
   </div>
@@ -91,5 +91,23 @@ export default {
   padding: 100px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.2);
   margin-bottom: 20px;
+}
+.el-button--goon.is-active,
+.el-button--goon:active {
+  background: #9e2edf94;
+  border-color: #9e2edf94;
+  color: #fff;
+}
+
+.el-button--goon:focus,
+.el-button--goon:hover {
+  background: #9e2edf94;
+  border-color: #9e2edf94;
+  color: #fff;
+}
+.el-button--goon {
+  color: #fff;
+  background-color: #41a8e4;
+  border-color: #41a8e4;
 }
 </style>

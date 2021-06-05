@@ -72,13 +72,12 @@ export default {
         }
       }
     },
+    //保存排班
     submitForm(form) {
       this.$refs[form].validate(valid => {
         var able = true;
         if (valid) {
           for (let item of this.$store.state.workforce) {
-              console.log(item,this.nowUser.department)
-    
             if (this.form.date == item.information.date && this.nowUser.department == item.department) {
               able = false;
                 this.$message({

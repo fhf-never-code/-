@@ -47,36 +47,43 @@ export default {
     },
   },
   //vuex中因为保存新的值班信息刷新公告栏中数据
-    watch: {
-    "$store.state.workforce"() {
-     this.getWorforceData()
+  watch: {
+    '$store.state.workforce'() {
+      this.getWorforceData();
     },
   },
   //方法集合
   methods: {
     //拿到走马灯中数据
     getWorforceData() {
-      this.carouselData = []
-      let workforce
-       if(sessionStorage.getItem('workforce')) {
-        workforce = JSON.parse(sessionStorage.getItem('workforce')) 
+      this.carouselData = [];
+      let workforce;
+      if (sessionStorage.getItem('workforce')) {
+        workforce = JSON.parse(sessionStorage.getItem('workforce'));
+      } else {
+        workforce = this.$store.state.workforce;
       }
-       else {
-         workforce = this.$store.state.workforce;
-       } 
       let day = new Date();
       let todayTime = new Date();
       day.setTime(day.getTime() + 24 * 60 * 60 * 1000);
       var today;
       var tomorrow;
-      //月份不足两位补零;
+      //月份 日期 不足两位补零;
       if (day.getMonth() < 10) {
-        tomorrow = day.getFullYear() + '-0' + (day.getMonth() + 1) + '-' + day.getDate();
+        if (day.getDay() < 10) {
+          tomorrow = day.getFullYear() + '-0' + (day.getMonth() + 1) + '-0' + day.getDate();
+        } else {
+          tomorrow = day.getFullYear() + '-0' + (day.getMonth() + 1) + '-' + day.getDate();
+        }
       } else {
         tomorrow = day.getFullYear() + '-' + (day.getMonth() + 1) + '-' + day.getDate();
       }
       if (todayTime.getMonth() < 10) {
-        today = todayTime.getFullYear() + '-0' + (todayTime.getMonth() + 1) + '-' + todayTime.getDate();
+        if (todayTime.getDay() < 10) {
+          today = todayTime.getFullYear() + '-0' + (todayTime.getMonth() + 1) + '-0' + todayTime.getDate();
+        } else {
+          today = todayTime.getFullYear() + '-0' + (todayTime.getMonth() + 1) + '-' + todayTime.getDate();
+        }
       } else {
         today = todayTime.getFullYear() + '-' + (todayTime.getMonth() + 1) + '-' + todayTime.getDate();
       }

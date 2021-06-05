@@ -53,7 +53,7 @@
             index="ItemSupplement"
             v-if="nowUser.department == 'inpatientWard' || nowUser.department == 'pharmacy' || nowUser.department == 'checkOffice'"
           >
-            <i class="el-icon-setting"></i>
+            <i class="el-icon-goods"></i>
             <span slot="title">物品申请</span>
           </el-menu-item>
            <el-menu-item index="GrantItem" v-if="nowUser.department == 'financeOffice'">
@@ -214,6 +214,8 @@ export default {
 
 .exit {
   margin-left: 1rem;
-  /* height: 0.5em; */
+  display: flex;
+
+  align-items: center;
 }
 </style>

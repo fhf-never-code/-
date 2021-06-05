@@ -165,6 +165,10 @@ const store = new Vuex.Store({
         }
       }
     },
+    //保存查账信息
+    [types.ADDCHECKACCOUNT] (state,data) {
+      state.checkAccount.push(data)
+    } 
   },
 });
 export default store;

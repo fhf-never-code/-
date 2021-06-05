@@ -36,7 +36,7 @@
         <el-input-number size="mini" v-model="falutAccount.difference" :precision="2" :step="0.5" :max="2000"></el-input-number
       ></span>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button @click="clearForm">取消</el-button>
         <el-button
           type="primary"
           @click="
@@ -84,7 +84,7 @@
         <el-input-number size="mini" v-model="falutAccount2.difference" :precision="2" :step="0.5" :max="2000"></el-input-number
       ></span>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible2 = false">取消</el-button>
+        <el-button @click="clearForm2">取消</el-button>
         <el-button
           type="primary"
           @click="
@@ -95,11 +95,12 @@
         >
       </span>
     </el-dialog>
-    <el-button @click="saveCheckAccount"> 保存今日查账</el-button>
+    <el-button type="primary" size="middle" @click="saveCheckAccount"> 保存今日查账</el-button>
   </div>
 </template>
 
 <script>
+import { ADDCHECKACCOUNT } from '../store/types';
 export default {
   data() {
     return {
@@ -243,26 +244,61 @@ export default {
             },
           ],
         };
-        if(this.active == 4) {
-          checkAccount.checkResult[0].isCorrect = false
-          checkAccount.checkResult[0].ownSolve = this.falutAccount.ownSolve
-          if(this.falutAccount.ownSolve == false) {
-              checkAccount.checkResult[0].difference = this. falutAccount.difference
+        if (this.active == 4) {
+          checkAccount.checkResult[0].isCorrect = false;
+          checkAccount.checkResult[0].ownSolve = this.falutAccount.ownSolve;
+          if (this.falutAccount.ownSolve == false) {
+            checkAccount.checkResult[0].difference = this.falutAccount.difference;
           }
-        } 
-         if(this.active2 == 4) {
-          checkAccount.checkResult[1].isCorrect = false
-          checkAccount.checkResult[1].ownSolve = this.falutAccount2.ownSolve
-          if(this.falutAccount2.ownSolve == false) {
-              checkAccount.checkResult[1].difference = this. falutAccount2.difference
+        }
+        if (this.active2 == 4) {
+          checkAccount.checkResult[1].isCorrect = false;
+          checkAccount.checkResult[1].ownSolve = this.falutAccount2.ownSolve;
+          if (this.falutAccount2.ownSolve == false) {
+            checkAccount.checkResult[1].difference = this.falutAccount2.difference;
           }
-        } 
-        console.log(checkAccount);
-        this.$message({
-          message: '成功保存查账记录',
-          type: 'success',
-        });
+        }
+        let save = true;
+        for (let item of this.$store.state.checkAccount) {
+          if (item.date == checkAccount.date) {
+            this.$message({
+              message: '已有今日查账记录',
+              type: 'error',
+            });
+            save = false;
+            break
+          }
+        }
+        if (save) {
+          this.$store.commit(ADDCHECKACCOUNT, checkAccount);
+          console.log(this.$store.state.checkAccount);
+          this.$message({
+            message: '成功保存查账记录',
+            type: 'success',
+          });
+        }
       }
+    },
+    //点击取消按钮恢复最初状态
+    clearForm() {
+      this.dialogVisible = false;
+      this.falutAccount = {
+        department: '',
+        difference: 0,
+        ownSolve: true,
+      };
+      this.active = 0;
+      this.isViable = false;
+    },
+    clearForm2() {
+      this.dialogVisible2 = false;
+      this.falutAccount2 = {
+        department: '',
+        difference: 0,
+        ownSolve: true,
+      };
+      this.active2 = 0;
+      this.isViable2 = false;
     },
   },
   created() {
@@ -289,15 +325,15 @@ export default {
 }
 .el-button--goon.is-active,
 .el-button--goon:active {
-  background: #20b2aa;
-  border-color: #20b2aa;
+  background: #bfca2994;
+  border-color: #bfca2994;
   color: #fff;
 }
 
 .el-button--goon:focus,
 .el-button--goon:hover {
-  background: #9481da;
-  border-color: #9481da;
+  background: #bfca2994;
+  border-color: #bfca2994;
   color: #fff;
 }
 .el-button--goon {
