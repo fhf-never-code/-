@@ -1,101 +1,134 @@
 <template>
-  <div class="container">
-    <el-form class="form">
-      <h1>药房账单</h1>
-      <el-form-item label="药房今日发药数量:">
-        {{ checkAccount.pharmacyAccount.length }}
-      </el-form-item>
-      <el-form-item label="药房今日应上交款项:"> {{ todayPharmacyMoney }} 元 </el-form-item>
-      <el-steps :active="active" simple class="step">
-        <el-step v-show="!isViable" title="待核查" icon="el-icon-edit"></el-step>
-        <el-step v-show="!isViable" title="核查中" icon="el-icon-upload"></el-step>
-        <el-step v-show="!isViable" title="核查无误" icon="el-icon-check"></el-step>
-        <el-step title="核查有误" icon="el-icon-close"> </el-step>
-      </el-steps>
-      <el-form-item label="错账数额:" v-show="!falutAccount.ownSolve"> {{ falutAccount.difference }} 元 </el-form-item>
-      <el-button style="margin-top: 12px;" type="goon" :disabled="isViable" @click="next">进行核查</el-button>
-      <el-button style="margin-top: 12px;" type="goon" @click="checkError('pharmacy')">核查有误</el-button>
-    </el-form>
+  <div>
+    <div class="container">
+      <el-form class="form">
+        <h1>药房账单</h1>
+        <el-form-item label="药房今日发药数量:">
+          {{ checkAccount.pharmacyAccount.length }}
+        </el-form-item>
+        <el-form-item label="药房今日应上交款项:"> {{ todayPharmacyMoney }} 元 </el-form-item>
+        <el-steps :active="active" simple class="step">
+          <el-step v-show="!isViable" title="待核查" icon="el-icon-edit"></el-step>
+          <el-step v-show="!isViable" title="核查中" icon="el-icon-upload"></el-step>
+          <el-step v-show="!isViable" title="核查无误" icon="el-icon-check"></el-step>
+          <el-step title="核查有误" icon="el-icon-close"> </el-step>
+        </el-steps>
+        <el-form-item label="错账数额:" v-show="!falutAccount.ownSolve"> {{ falutAccount.difference }} 元 </el-form-item>
+        <el-button style="margin-top: 12px;" type="goon" :disabled="isViable" @click="next">进行核查</el-button>
+        <el-button style="margin-top: 12px;" type="goon" @click="checkError('pharmacy')">核查有误</el-button>
+      </el-form>
 
-    <el-dialog title="错账核查" :visible.sync="dialogVisible" width="30%">
-      <span> 错账部门: 药房</span>
-      <p>
-        是否能自主检查错账:
-        <el-switch
-          style="display: block"
-          v-model="falutAccount.ownSolve"
-          active-color="#13ce66"
-          inactive-color="#ff4949"
-          active-text="是"
-          inactive-text="否"
-        >
-        </el-switch>
-      </p>
-      <span v-show="!falutAccount.ownSolve"
-        >错误账目数额:
-        <el-input-number size="mini" v-model="falutAccount.difference" :precision="2" :step="0.5" :max="2000"></el-input-number
-      ></span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="clearForm">取消</el-button>
-        <el-button
-          type="primary"
-          @click="
-            dialogVisible = false;
-            onSubmit('1');
-          "
-          >确定</el-button
-        >
-      </span>
-    </el-dialog>
+      <el-dialog title="错账核查" :visible.sync="dialogVisible" width="30%">
+        <span> 错账部门: 药房</span>
+        <p>
+          是否能自主检查错账:
+          <el-switch
+            style="display: block"
+            v-model="falutAccount.ownSolve"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            active-text="是"
+            inactive-text="否"
+          >
+          </el-switch>
+        </p>
+        <span v-show="!falutAccount.ownSolve"
+          >错误账目数额:
+          <el-input-number size="mini" v-model="falutAccount.difference" :precision="2" :step="0.5" :max="2000"></el-input-number
+        ></span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="clearForm">取消</el-button>
+          <el-button
+            type="primary"
+            @click="
+              dialogVisible = false;
+              onSubmit('1');
+            "
+            >确定</el-button
+          >
+        </span>
+      </el-dialog>
+      <el-dialog title="查账记录" :visible.sync="dialogVisible3">
+        <span v-show="accountRecord.length==0"> 暂无查账记录</span>
+        <el-form :inline="true">
+          <div v-for="(item, index) in accountRecord" :key="index">
+            <el-form-item label="查账日期:">
+              {{ item.date }}
+            </el-form-item>
+            <div v-for="(item2, index2) in item.checkResult" :key="index2 + '查账'">
+              <el-form-item label="科室:">
+                {{ getChinese(item2.department) }}
+              </el-form-item>
+              <el-form-item label="收费项数:">
+                {{ item2.checkNum }}
+              </el-form-item>
+              <el-form-item label="收费项数:">
+                {{ item2.checkNum }}
+              </el-form-item>
+              <el-form-item label="是否无错账:">
+                {{ getChinese(item2.isCorrect) }}
+              </el-form-item>
+              <el-form-item label="是否能自主纠错:" v-show="!item2.isCorrect">
+                {{ getChinese(item2.ownSolve) }}
+              </el-form-item>
+              <el-form-item label="错账金额:" v-show="!item2.ownSolve"> {{ item2.difference }} 元 </el-form-item>
+            </div>
+            <el-divider></el-divider>
+          </div>
+        </el-form>
+      </el-dialog>
+      <el-form class="form">
+        <h1>挂号处账单</h1>
+        <el-form-item label="挂号处今日挂号数量:">
+          {{ checkAccount.registrationAccount.length }}
+        </el-form-item>
+        <el-form-item label="挂号处今日上应交款项:"> {{ todayRegistrationMoney }} 元 </el-form-item>
+        <el-steps :active="active2" simple class="step">
+          <el-step v-show="!isViable2" title="待核查" icon="el-icon-edit"></el-step>
+          <el-step v-show="!isViable2" title="核查中" icon="el-icon-upload"></el-step>
+          <el-step v-show="!isViable2" title="核查无误" icon="el-icon-check"></el-step>
+          <el-step title="核查有误" icon="el-icon-close"> </el-step>
+        </el-steps>
+        <el-form-item label="错账数额:" v-show="!falutAccount2.ownSolve"> {{ falutAccount2.difference }} 元 </el-form-item>
+        <el-button style="margin-top: 12px;" :disabled="isViable2" type="goon" @click="next2">进行核查</el-button>
+        <el-button style="margin-top: 12px;" type="goon" @click="checkError('registration')">核查有误</el-button>
+      </el-form>
 
-    <el-form class="form">
-      <h1>挂号处账单</h1>
-      <el-form-item label="挂号处今日挂号数量:">
-        {{ checkAccount.registrationAccount.length }}
-      </el-form-item>
-      <el-form-item label="挂号处今日上应交款项:"> {{ todayRegistrationMoney }} 元 </el-form-item>
-      <el-steps :active="active2" simple class="step">
-        <el-step v-show="!isViable2" title="待核查" icon="el-icon-edit"></el-step>
-        <el-step v-show="!isViable2" title="核查中" icon="el-icon-upload"></el-step>
-        <el-step v-show="!isViable2" title="核查无误" icon="el-icon-check"></el-step>
-        <el-step title="核查有误" icon="el-icon-close"> </el-step>
-      </el-steps>
-      <el-form-item label="错账数额:" v-show="!falutAccount2.ownSolve"> {{ falutAccount2.difference }} 元 </el-form-item>
-      <el-button style="margin-top: 12px;" :disabled="isViable2" type="goon" @click="next2">进行核查</el-button>
-      <el-button style="margin-top: 12px;" type="goon" @click="checkError('registration')">核查有误</el-button>
-    </el-form>
-
-    <el-dialog title="错账核查" :visible.sync="dialogVisible2" width="30%">
-      <span> 错账部门: 挂号处</span>
-      <p>
-        是否能自主检查错账:
-        <el-switch
-          style="display: block"
-          v-model="falutAccount2.ownSolve"
-          active-color="#13ce66"
-          inactive-color="#ff4949"
-          active-text="是"
-          inactive-text="否"
-        >
-        </el-switch>
-      </p>
-      <span v-show="!falutAccount2.ownSolve"
-        >错误账目数额:
-        <el-input-number size="mini" v-model="falutAccount2.difference" :precision="2" :step="0.5" :max="2000"></el-input-number
-      ></span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="clearForm2">取消</el-button>
-        <el-button
-          type="primary"
-          @click="
-            dialogVisible2 = false;
-            onSubmit('2');
-          "
-          >确定</el-button
-        >
-      </span>
-    </el-dialog>
-    <el-button type="primary" size="middle" @click="saveCheckAccount"> 保存今日查账</el-button>
+      <el-dialog title="错账核查" :visible.sync="dialogVisible2" width="30%">
+        <span> 错账部门: 挂号处</span>
+        <p>
+          是否能自主检查错账:
+          <el-switch
+            style="display: block"
+            v-model="falutAccount2.ownSolve"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            active-text="是"
+            inactive-text="否"
+          >
+          </el-switch>
+        </p>
+        <span v-show="!falutAccount2.ownSolve"
+          >错误账目数额:
+          <el-input-number size="mini" v-model="falutAccount2.difference" :precision="2" :step="0.5" :max="2000"></el-input-number
+        ></span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="clearForm2">取消</el-button>
+          <el-button
+            type="primary"
+            @click="
+              dialogVisible2 = false;
+              onSubmit('2');
+            "
+            >确定</el-button
+          >
+        </span>
+      </el-dialog>
+    </div>
+    <div class="buttonArea">
+      <el-button type="primary" size="middle" @click="saveCheckAccount"> 保存今日查账</el-button>
+      <el-button type="goon" size="middle" @click="getCheckAccount"> 查看查账记录 </el-button>
+    </div>
   </div>
 </template>
 
@@ -112,8 +145,10 @@ export default {
       todayRegistrationMoney: 0,
       active: 0,
       active2: 0,
-      dialogVisible: false,
-      dialogVisible2: false,
+      dialogVisible: false, // 药房错账表
+      dialogVisible2: false, // 挂号处错账表
+      dialogVisible3: false, // 查账记录表
+      accountRecord: {},
       falutAccount: {
         department: '',
         difference: 0, //如果不能自主查出错账原因 上报差额 按系数要求收银员赔偿
@@ -207,6 +242,19 @@ export default {
         this.dialogVisible = true;
       }
     },
+    //转化中文名
+    getChinese(value) {
+      switch (value) {
+        case 'registration':
+          return '挂号处';
+        case 'pharmacy':
+          return '药房';
+        case true:
+          return '是';
+        case false:
+          return '否';
+      }
+    },
     //保存查账记录
     saveCheckAccount() {
       if (this.active < 3 || this.active2 < 3) {
@@ -266,12 +314,12 @@ export default {
               type: 'error',
             });
             save = false;
-            break
+            break;
           }
         }
         if (save) {
           this.$store.commit(ADDCHECKACCOUNT, checkAccount);
-          console.log(this.$store.state.checkAccount);
+          // console.log(this.$store.state.checkAccount);
           this.$message({
             message: '成功保存查账记录',
             type: 'success',
@@ -299,6 +347,14 @@ export default {
       };
       this.active2 = 0;
       this.isViable2 = false;
+    },
+    //查看查账记录
+    getCheckAccount() {
+      this.dialogVisible3 = true;
+      let checkAccount = this.$store.state.checkAccount;
+
+      this.accountRecord = checkAccount;
+      console.log(checkAccount);
     },
   },
   created() {
@@ -340,5 +396,8 @@ export default {
   color: #fff;
   background-color: #20b2aa;
   border-color: #20b2aa;
+}
+ .buttonArea{
+  margin-top: 20px;
 }
 </style>

@@ -53,6 +53,11 @@ export default {
     };
   },
   //方法集合
+  watch:{
+    '$store.state.user'(){
+      this.getPerfomance()
+    }
+  },
   methods: {
     /* 绩效管理 暂时先写一些根据职务和工龄获得的奖励 不分部门*/
     getPerfomance() {
@@ -67,17 +72,17 @@ export default {
         case 'nurse':
           formData.workYearsSubsidy = formData.workYears * 30;
           formData.daySubsidy = formData.workload.day * 70;
-          formData.numSubsidy = formData.workload.num * 10;
+          formData.numSubsidy = formData.workload.num * 8;
           break;
         case 'leader':
           formData.workYearsSubsidy = formData.workYears * 65;
           formData.daySubsidy = formData.workload.day * 100;
-          formData.numSubsidy = formData.workload.num * 20;
+          formData.numSubsidy = formData.workload.num * 15;
           break;
         case 'cashier':
           formData.workYearsSubsidy = formData.workYears * 65;
           formData.daySubsidy = formData.workload.day * 75;
-          formData.numSubsidy = formData.workload.num * 20;
+          formData.numSubsidy = formData.workload.num * 9;
           break;
       }
       formData.count = formData.workYearsSubsidy + formData.daySubsidy + formData.numSubsidy;
@@ -87,15 +92,6 @@ export default {
   created() {
     this.getPerfomance();
   },
-  //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {},
-  beforeCreate() {}, //生命周期 - 创建之前
-  beforeMount() {}, //生命周期 - 挂载之前
-  beforeUpdate() {}, //生命周期 - 更新之前
-  updated() {}, //生命周期 - 更新之后
-  beforeDestroy() {}, //生命周期 - 销毁之前
-  destroyed() {}, //生命周期 - 销毁完成
-  activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
 };
 </script>
 <style scoped>

@@ -19,7 +19,7 @@ const user = [
     identity: 'doctor',
     workYears: 7,
     workload: {
-      day: 20,
+      day: 10,
       num: 5,
     },
   },
@@ -32,7 +32,7 @@ const user = [
     identity: 'leader',
     workYears: 20,
     workload: {
-      day: 19,
+      day: 8,
       num: 5,
     },
   },
@@ -45,7 +45,7 @@ const user = [
     identity: 'doctor',
     workYears: 6,
     workload: {
-      day: 19,
+      day: 9,
       num: 50,
     },
   },
@@ -58,7 +58,7 @@ const user = [
     identity: 'doctor',
     workYears: 12,
     workload: {
-      day: 22,
+      day: 7,
       num: 50,
     },
   },
@@ -71,7 +71,7 @@ const user = [
     identity: 'leader',
     workYears: 5,
     workload: {
-      day: 22,
+      day: 7,
       num: 20,
     },
   },
@@ -84,7 +84,7 @@ const user = [
     identity: 'nurse',
     workYears: 5,
     workload: {
-      day: 20,
+      day: 9,
       num: 5,
     },
   },
@@ -97,7 +97,7 @@ const user = [
     identity: 'nurse',
     workYears: 2,
     workload: {
-      day: 21,
+      day: 10,
       num: 10,
     },
   },
@@ -110,7 +110,7 @@ const user = [
     identity: 'cashier', //收银员
     workYears: 8,
     workload: {
-      day: 20,
+      day: 10,
       num: 5,
     },
   },
@@ -123,7 +123,7 @@ const user = [
     identity: 'leader',
     workYears: 12,
     workload: {
-      day: 20,
+      day: 10,
       num: 6,
     },
   },
@@ -136,7 +136,7 @@ const user = [
     identity: 'cashier',
     workYears: 12,
     workload: {
-      day: 15,
+      day: 9,
       num: 20,
     },
   },
@@ -149,7 +149,7 @@ const user = [
     identity: 'leader',
     workYears: 2,
     workload: {
-      day: 15,
+      day: 8,
       num: 22,
     },
   },
@@ -175,7 +175,7 @@ const user = [
     identity: 'leader',
     workYears: 15,
     workload: {
-      day: 19,
+      day: 12,
       num: 36,
     },
   },

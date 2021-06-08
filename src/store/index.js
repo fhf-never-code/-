@@ -11,7 +11,8 @@ import inpatientWard from './inpatientWard';
 import item from './item';
 import checkResult from './checkResult';
 import giveMedicine from './giveMedicine';
-import checkAccount from './checkAccount'
+import checkAccount from './checkAccount';
+import performanceCoefficient from './performanceCoefficient'
 Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
@@ -26,6 +27,7 @@ const store = new Vuex.Store({
     checkResult, // 检查结果
     giveMedicine, // 发药单
     checkAccount, //查账记录
+    performanceCoefficient, // 绩效系数
   },
   mutations: {
     //更新员工信息
@@ -166,9 +168,18 @@ const store = new Vuex.Store({
       }
     },
     //保存查账信息
-    [types.ADDCHECKACCOUNT] (state,data) {
-      state.checkAccount.push(data)
-    } 
+    [types.ADDCHECKACCOUNT](state, data) {
+      state.checkAccount.push(data);
+    },
+    //签到 就签一次 时间不够不写只在一天显示一次了
+    [types.SIGN] (state,data) {
+      for (let item of state.user ) {
+        if(item.name == data) {
+          item.workload.day++
+          break
+        }
+      }
+    }
   },
 });
 export default store;

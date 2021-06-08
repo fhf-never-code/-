@@ -64,6 +64,10 @@
             <i class="el-icon-star-on"></i>
             <span slot="title">绩效管理</span>
           </el-menu-item>
+            <el-menu-item index="Charge" v-if="nowUser.department == 'financeOffice'">
+            <i class="el-icon-money"></i>
+            <span slot="title">收费</span>
+          </el-menu-item>
           <el-menu-item index="CheckAccount" v-if="nowUser.department == 'financeOffice'">
             <i class="el-icon-info"></i>
             <span slot="title">账目核查</span>
@@ -78,6 +82,7 @@
         <el-header>
           {{ nowUser.name }},欢迎您登陆
           <el-button class="exit" @click="exit" type="primary" round>登出</el-button>
+          <el-button class="exit" @click="sign" type="primary" v-show="showSign" >签到</el-button>
         </el-header>
         <el-main>
           <div class="main">
@@ -95,6 +100,7 @@
             <MedicineManage :nowUser="nowUser" v-show="nowCompoents == 'MedicineManage'"></MedicineManage>
             <PerformanceManagement :nowUser="nowUser" v-show="nowCompoents == 'PerformanceManagement'" > </PerformanceManagement>
             <CheckAccount :nowUser="nowUser" v-show="nowCompoents == 'CheckAccount'" > </CheckAccount>
+            <Charge :nowUser="nowUser" v-show="nowCompoents == 'Charge'" > </Charge>
           </div>
         </el-main>
         <el-footer>东北林业大学2017级软件工程二班李一锋 权利所有</el-footer>
@@ -117,6 +123,8 @@ import GrantItem from '../components/GrantItem'
 import MedicineManage from '../components/MedicineManage'
 import PerformanceManagement from '../components/PerformanceManagement'
 import CheckAccount from '../components/CheckAccount'
+import Charge from '../components/Charge'
+import {SIGN} from '../store/types'
 export default {
   components: {
     Notice, // 通知  
@@ -132,12 +140,14 @@ export default {
     GrantItem, // 物品发放
     MedicineManage, // 
     PerformanceManagement, // 绩效管理
-    CheckAccount // 查账管理
+    CheckAccount, // 查账管理
+    Charge, // 财务处收检查和住院的费用
   },
   data() {
     return {
       nowCompoents: 'Notice',
       nowuser: '',
+      showSign:true
     };
   },
   methods: {
@@ -152,16 +162,21 @@ export default {
       });
       this.$router.push('/');
     },
-    /*
-            菜单切换函数 根据index切换main的组件
-            */
+    // 菜单切换函数 根据index切换main的组件
     handleSelect(key) {
       this.nowCompoents = key;
     },
+    //签到
+    sign() {
+      this.$store.commit(SIGN,this.nowUser.name)
+      this.showSign = false
+      this.$message({
+        message: '成功签到',
+        type: 'success',
+      });
+    }
   },
-  /*
-        防止因为直接切换路径进入 只要缓存里没有数据就返回登录界面
-        */
+  // 防止因为直接切换路径进入 只要缓存里没有数据就返回登录界面
   beforeCreate() {
     if (!sessionStorage.getItem('user')) {
       this.$router.push('/');
