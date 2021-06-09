@@ -8,16 +8,21 @@ const performanceCoefficient = {
   nurse: {
     workYearsSubsidy: 30,
     workNumSubsidy: 20,
-    workDaySubsidy: 80,
+    workDaySubsidy: 60,
   },
   cashier: {
-    workYearsSubsidy: 50,
-    workNumSubsidy: 20,
-    workDaySubsidy: 80,
+    workYearsSubsidy: 30,
+    workNumSubsidy: 12,
+    workDaySubsidy: 60,
+  },
+  checker: {
+    workYearsSubsidy: 30,
+    workNumSubsidy: 19,
+    workDaySubsidy: 62,
   },
   leader: {
-    workYearsSubsidy: 50,
-    workNumSubsidy: 20,
+    workYearsSubsidy: 60,
+    workNumSubsidy: 22,
     workDaySubsidy: 80,
   },
 };

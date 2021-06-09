@@ -12,7 +12,7 @@ import item from './item';
 import checkResult from './checkResult';
 import giveMedicine from './giveMedicine';
 import checkAccount from './checkAccount';
-import performanceCoefficient from './performanceCoefficient'
+import performanceCoefficient from './performanceCoefficient';
 Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
@@ -171,15 +171,24 @@ const store = new Vuex.Store({
     [types.ADDCHECKACCOUNT](state, data) {
       state.checkAccount.push(data);
     },
-    //签到 就签一次 时间不够不写只在一天显示一次了
-    [types.SIGN] (state,data) {
-      for (let item of state.user ) {
-        if(item.name == data) {
-          item.workload.day++
-          break
+    /*
+    签到 就签一次 时间不够不写只在一天显示一次了
+    废弃原因 已经把登录用户加入缓存再取出 更改全局数据是没用的 登录的时候拿到并且一直使用的是this.nowUser
+    暂时还得拿出来用 因为watch监听不到
+    */
+    [types.SIGN](state, data) {
+      for (let item of state.user) {
+        if (item.name == data) {
+          item.workload.day++;
+          break;
         }
       }
-    }
+    },
+    
+    //保存修改绩效系数
+    [types.SAVEPERFORMANCECOEFFCIENT](state, data) {
+      state.performanceCoefficient = data;
+    },
   },
 });
 export default store;

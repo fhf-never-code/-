@@ -147,10 +147,23 @@ const user = [
     password: '1008',
     department: 'checkOffice',
     identity: 'leader',
-    workYears: 2,
+    workYears: 5,
     workload: {
       day: 8,
       num: 22,
+    },
+  },
+  {
+    id: 10081,
+    name: '武清林',
+    userName: '1008611',
+    password: '1008611',
+    department: 'checkOffice',
+    identity: 'checker',
+    workYears: 2,
+    workload: {
+      day: 8,
+      num: 12,
     },
   },
   {

@@ -3,7 +3,7 @@
     <div class="form">
       <el-form :model="formInline">
         <el-form-item label="姓名">
-          <el-input v-model="formInline.name" disabled></el-input>
+          <el-input v-model="user.name" disabled></el-input>
         </el-form-item>
         <el-form-item label="职责">
           <el-input v-model="formInline.identity" disabled></el-input>
@@ -16,13 +16,13 @@
     <div class="form">
       <el-form :model="formInline">
         <el-form-item label="工龄">
-          <el-input v-model="formInline.workYears" disabled></el-input>
+          <el-input v-model="user.workYears" disabled></el-input>
         </el-form-item>
         <el-form-item label="本月出勤">
-          <el-input v-model="formInline.workload.day" disabled></el-input>
+          <el-input v-model="user.workload.day" disabled></el-input>
         </el-form-item>
         <el-form-item label="本月工作量">
-          <el-input v-model="formInline.workload.num" disabled></el-input>
+          <el-input v-model="user.workload.num" disabled></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -38,21 +38,32 @@ export default {
         department: '',
         identity: '',
       },
+      user: {},
     };
   },
   methods: {
     //根据中英文对照关系
     getName() {
-      let nowUser = this.nowUser;
-      Object.assign(this.formInline, JSON.parse(JSON.stringify(nowUser)));
+      let user = this.$store.state.user;
+      for (let item of user) {
+        if (this.nowUser.name == item.name) {
+          this.user = item;
+          break;
+        }
+      }
       let comparisonTable = this.$store.state.comparisonTable;
-      this.formInline.department = comparisonTable.get(this.formInline.department);
-      this.formInline.identity = comparisonTable.get(this.formInline.identity);
+      this.formInline.department = comparisonTable.get(this.nowUser.department);
+      this.formInline.identity = comparisonTable.get(this.nowUser.identity);
     },
   },
   //生命周期 - 挂载完成（可以访问DOM元素）
   created() {
     this.getName();
+  },
+  watch: {
+    '$store.state.user'() {
+      this.getName();
+    },
   },
 };
 </script>

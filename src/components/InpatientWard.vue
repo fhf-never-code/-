@@ -185,7 +185,6 @@ export default {
       }
       this.patientList = []
       this.getPatientList();
-      console.log(this.patientList);
     },
     //清空表单
     clearForm() {

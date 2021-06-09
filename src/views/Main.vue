@@ -56,7 +56,7 @@
             <i class="el-icon-goods"></i>
             <span slot="title">物品申请</span>
           </el-menu-item>
-           <el-menu-item index="GrantItem" v-if="nowUser.department == 'financeOffice'">
+          <el-menu-item index="GrantItem" v-if="nowUser.department == 'financeOffice'">
             <i class="el-icon-document"></i>
             <span slot="title">物品发放</span>
           </el-menu-item>
@@ -64,7 +64,7 @@
             <i class="el-icon-star-on"></i>
             <span slot="title">绩效管理</span>
           </el-menu-item>
-            <el-menu-item index="Charge" v-if="nowUser.department == 'financeOffice'">
+          <el-menu-item index="Charge" v-if="nowUser.department == 'financeOffice'">
             <i class="el-icon-money"></i>
             <span slot="title">收费</span>
           </el-menu-item>
@@ -72,7 +72,7 @@
             <i class="el-icon-info"></i>
             <span slot="title">账目核查</span>
           </el-menu-item>
-            <el-menu-item index="MedicineManage" v-if="nowUser.department == 'pharmacy'">
+          <el-menu-item index="MedicineManage" v-if="nowUser.department == 'pharmacy'">
             <i class="el-icon-info"></i>
             <span slot="title">药品管理</span>
           </el-menu-item>
@@ -82,7 +82,7 @@
         <el-header>
           {{ nowUser.name }},欢迎您登陆
           <el-button class="exit" @click="exit" type="primary" round>登出</el-button>
-          <el-button class="exit" @click="sign" type="primary" v-show="showSign" >签到</el-button>
+          <el-button class="exit" @click="sign" type="primary" v-show="showSign">签到</el-button>
         </el-header>
         <el-main>
           <div class="main">
@@ -98,9 +98,9 @@
             <CheckManage :nowUser="nowUser" v-show="nowCompoents == 'CheckManage'"></CheckManage>
             <GrantItem :nowUser="nowUser" v-show="nowCompoents == 'GrantItem'"></GrantItem>
             <MedicineManage :nowUser="nowUser" v-show="nowCompoents == 'MedicineManage'"></MedicineManage>
-            <PerformanceManagement :nowUser="nowUser" v-show="nowCompoents == 'PerformanceManagement'" > </PerformanceManagement>
-            <CheckAccount :nowUser="nowUser" v-show="nowCompoents == 'CheckAccount'" > </CheckAccount>
-            <Charge :nowUser="nowUser" v-show="nowCompoents == 'Charge'" > </Charge>
+            <PerformanceManagement :nowUser="nowUser" v-show="nowCompoents == 'PerformanceManagement'"> </PerformanceManagement>
+            <CheckAccount :nowUser="nowUser" v-show="nowCompoents == 'CheckAccount'"> </CheckAccount>
+            <Charge :nowUser="nowUser" v-show="nowCompoents == 'Charge'"> </Charge>
           </div>
         </el-main>
         <el-footer>东北林业大学2017级软件工程二班李一锋 权利所有</el-footer>
@@ -119,26 +119,26 @@ import InpatientWard from '../components/InpatientWard.vue';
 import WorkforceManagement from '../components/WorkforceManagement.vue';
 import ItemSupplement from '../components/ItemSupplement.vue';
 import CheckManage from '../components/CheckManage';
-import GrantItem from '../components/GrantItem'
-import MedicineManage from '../components/MedicineManage'
-import PerformanceManagement from '../components/PerformanceManagement'
-import CheckAccount from '../components/CheckAccount'
-import Charge from '../components/Charge'
-import {SIGN} from '../store/types'
+import GrantItem from '../components/GrantItem';
+import MedicineManage from '../components/MedicineManage';
+import PerformanceManagement from '../components/PerformanceManagement';
+import CheckAccount from '../components/CheckAccount';
+import Charge from '../components/Charge';
+import { SIGN } from '../store/types'
 export default {
   components: {
-    Notice, // 通知  
+    Notice, // 通知
     Diagnose, // 看诊
-    MyInformation,  // 个人信息
+    MyInformation, // 个人信息
     Registration, //挂号管理
     MyDepartment, //我的部门
     MyPerformance, // 我的绩效
-    InpatientWard,  // 病房管理
+    InpatientWard, // 病房管理
     WorkforceManagement, // 值班管理
     ItemSupplement, // 物品申请
-    CheckManage,  // 检查管理
+    CheckManage, // 检查管理
     GrantItem, // 物品发放
-    MedicineManage, // 
+    MedicineManage, //
     PerformanceManagement, // 绩效管理
     CheckAccount, // 查账管理
     Charge, // 财务处收检查和住院的费用
@@ -147,7 +147,7 @@ export default {
     return {
       nowCompoents: 'Notice',
       nowuser: '',
-      showSign:true
+      showSign: true,
     };
   },
   methods: {
@@ -168,13 +168,14 @@ export default {
     },
     //签到
     sign() {
+      this.nowUser.workload.day++
       this.$store.commit(SIGN,this.nowUser.name)
-      this.showSign = false
+      this.showSign = false;
       this.$message({
         message: '成功签到',
         type: 'success',
       });
-    }
+    },
   },
   // 防止因为直接切换路径进入 只要缓存里没有数据就返回登录界面
   beforeCreate() {
