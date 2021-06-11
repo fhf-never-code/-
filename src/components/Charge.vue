@@ -9,7 +9,7 @@
         <el-form-item label="选择收费项:">
           <el-select v-model="form.price">
             <el-option label="空腹血糖测量" value="20"></el-option>
-            <el-option label="肾上腺囊周手术综合收费" value="2000"></el-option>
+            <el-option label="肾上腺囊手术综合收费" value="2000"></el-option>
           </el-select>
           <el-form-item label="收费金额:"> {{ form.price }} 元 </el-form-item>
         </el-form-item>

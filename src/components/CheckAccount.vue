@@ -71,7 +71,7 @@
               <el-form-item label="是否能自主纠错:" v-show="!item2.isCorrect">
                 {{ getChinese(item2.ownSolve) }}
               </el-form-item>
-              <el-form-item label="错账金额:" v-show="!item2.ownSolve"> {{ item2.difference }} 元 </el-form-item>
+              <el-form-item label="错账金额:" v-show="!item2.ownSolve && !item2.isCorrect "> {{ item2.difference }} 元 </el-form-item>
             </div>
             <el-divider></el-divider>
           </div>

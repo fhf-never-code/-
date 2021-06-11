@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <el-dialog title="看诊单" :visible.sync="dialogFormVisible">
-      <el-form :inline="true" :model="form" ref="form" class="form" :rules="rules">
+      <el-form :label-position="labelPosition" :inline="true" :model="form" ref="form" class="form" :rules="rules">
         <el-form-item label="当前患者">
           {{ form.patientName }}
         </el-form-item>
@@ -82,6 +82,7 @@ export default {
     return {
       patientList: [],
       dialogFormVisible: false,
+      labelPosition:'left',
       form: {
         patientName: '',
         clinicalSign: '',

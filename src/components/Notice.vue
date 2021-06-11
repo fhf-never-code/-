@@ -69,26 +69,24 @@ export default {
       var today;
       var tomorrow;
       //月份 日期 不足两位补零;
-      if (day.getMonth() < 10) {
-        if (day.getDay() < 10) {
-          tomorrow = day.getFullYear() + '-0' + (day.getMonth() + 1) + '-0' + day.getDate();
-        } else {
+      if (day.getMonth() < 9) {
+        if (day.getDay() < 9) {
           tomorrow = day.getFullYear() + '-0' + (day.getMonth() + 1) + '-' + day.getDate();
         }
       } else {
         tomorrow = day.getFullYear() + '-' + (day.getMonth() + 1) + '-' + day.getDate();
       }
-      if (todayTime.getMonth() < 10) {
-        if (todayTime.getDay() < 10) {
-          today = todayTime.getFullYear() + '-0' + (todayTime.getMonth() + 1) + '-0' + todayTime.getDate();
-        } else {
+      if (todayTime.getMonth() < 9) {
+        if (todayTime.getDay() < 9) {
           today = todayTime.getFullYear() + '-0' + (todayTime.getMonth() + 1) + '-' + todayTime.getDate();
         }
       } else {
         today = todayTime.getFullYear() + '-' + (todayTime.getMonth() + 1) + '-' + todayTime.getDate();
       }
+      console.log(today, tomorrow);
       //符合日期在今日和明日的值班信息
       for (let item of workforce) {
+        // console.log(item.information.date,today)
         if (item.information.date == today || item.information.date == tomorrow) {
           this.carouselData.push(item);
         }
@@ -117,10 +115,10 @@ export default {
   padding-left: 10px;
 }
 .el-carousel__item:nth-child(2n) {
-  background-color: rgb(95, 178, 233);
+  background-color: rgb(136, 194, 233);
 }
 
 .el-carousel__item:nth-child(2n + 1) {
-  background-color: #306cdb;
+  background-color: #5edef5;
 }
 </style>

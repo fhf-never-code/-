@@ -68,7 +68,7 @@
           </el-form-item>
         </el-form-item>
         <el-button @click="saveChange" type="primary">
-          保存绩效函数修改
+          保存绩效系数修改
         </el-button>
       </el-form>
     </el-dialog>
