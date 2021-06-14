@@ -83,10 +83,8 @@ export default {
       } else {
         today = todayTime.getFullYear() + '-' + (todayTime.getMonth() + 1) + '-' + todayTime.getDate();
       }
-      console.log(today, tomorrow);
       //符合日期在今日和明日的值班信息
       for (let item of workforce) {
-        // console.log(item.information.date,today)
         if (item.information.date == today || item.information.date == tomorrow) {
           this.carouselData.push(item);
         }

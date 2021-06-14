@@ -32,7 +32,7 @@ const workforce = [
       dayShift: ['张磊'],
       beforeNightShift: ['徐静'],
       afterNightShift: ['张红英', '徐静'],
-      date: '2021-05-25',
+      date: '2021-06-15',
     },
   },
 ];
