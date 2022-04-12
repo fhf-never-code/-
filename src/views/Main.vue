@@ -83,6 +83,7 @@
           {{ nowUser.name }},欢迎您登陆
           <el-button class="exit" @click="exit" type="primary" round>登出</el-button>
           <el-button class="exit" @click="sign" type="primary" v-show="showSign">签到</el-button>
+          <el-button @click="test" > 切换测试</el-button>
         </el-header>
         <el-main>
           <div class="main">
@@ -165,6 +166,10 @@ export default {
     // 菜单切换函数 根据index切换main的组件
     handleSelect(key) {
       this.nowCompoents = key;
+    },
+    //测试界面
+    test() {
+      this.$router.push('Test')
     },
     //签到
     sign() {
